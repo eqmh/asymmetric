@@ -3,7 +3,7 @@ Developing “asymmetrical” sampling strategies for networks
 
 The idea of developing “asymmetrical” sampling strategies for networks that span large gradients in biodiversity is a really intriguing one and potentially very useful contribution, as these networks often have limited resources that need to be carefully and thoughtfully applied to maximize return on investment.
 
-This repo will develop and share the statistical tools (eg, multivariate SE, coverage-based stopping, etc) to allow others to optimize their own sampling.
+in this study we will develop and share the statistical tools (eg, multivariate SE, coverage-based stopping, etc) to allow others to optimize their own sampling.
 
 Quality controlled data for this study is available at the network's [drive](https://drive.google.com/open?id=1oPQAyJXzDuxmjYI7y9JXAZR0zBa_bJjy).
 
