@@ -1,0 +1,44 @@
+---
+title: "MBON P2P Survey Optimization"
+author: "Jon Lefcheck"
+date: "7/10/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(iNEXT)
+library(tidyverse)
+```
+
+## Optimizing sampling across global surveys
+
+## Import the data
+
+First, let's import and clean up the test data from Argentina:
+
+```{r}
+# source functons
+source("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/R/covstop.R")
+
+source("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/R/estimateD.new.R")
+
+source("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/R/multSE.R")
+
+# read in data
+test <- readxl::read_excel("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/ARG-PMADRYN.xlsx", sheet = 1, skip = 15)
+
+# remove summary rows
+test <- test[!is.na(test$`Survey date (yyyy-mm-dd)`), ]
+
+# replace NAs with 0
+test[, 8:19][is.na(test[, 8:19])] <- 0
+```
+
+
+
+
+
