@@ -91,7 +91,7 @@ covstop <- function(comm, type = "samples", Cn = 0.90, se = FALSE, knots = 40) {
   
   x <- as.numeric(sc[which.max(sc)])
   
-  print(paste0("Number of ", type, " needed to reach ", Cn*100, "% coverage: ", x))
+  # print(paste0("Number of ", type, " needed to reach ", Cn*100, "% coverage: ", x))
   
   x
 
