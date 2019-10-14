@@ -1,5 +1,7 @@
 library(tidyverse)
 
+# finch::dwca_read(..., read = TRUE)
+
 files <- list.files("C:/Users/jslef/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data")
 
 out <- do.call(rbind, lapply(files, function(l) {
