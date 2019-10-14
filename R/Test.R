@@ -9,6 +9,9 @@ out <- do.call(rbind, lapply(files, function(l) {
   # read in data
   dat <- read.csv(paste0("C:/Users/jslef/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data", l))
   
+  # take only the present species
+  dat <- subset(dat, occurrenceStatus == "present")
+  
   # split metadata
   meta <- do.call(rbind.data.frame, strsplit(as.character(dat$eventID), "\\_"))
   
