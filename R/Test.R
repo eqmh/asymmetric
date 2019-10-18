@@ -51,7 +51,7 @@ p2p <- do.call(rbind, lapply(files, function(l) {
 p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
 
 # Read in site lat/longs
-sites <- read.table("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/sites.txt", header = T)
+sites <- read.csv("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/sites.csv", header = T)
 
 #####-----------------------------------------------------------------------------------------------
 
@@ -191,10 +191,27 @@ samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 
 samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
-# Generate summary figures
-out.summary <- samps %>% group_by(strata) %>% summarize(mean.samples = mean(minsamples), se.samples = plotrix::std.error(minsamples))
+samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN", "CONCEPCIÃ"N", "REÃ'ACA,VIÃ'ADELMAR",
+                                                      "ARRAIALDOCABO", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", 
+                                                      "NORTHERNMA", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
 
-ggplot(out.summary, aes(x = strata, y = mean.samples)) +
-  geom_errorbar(aes(ymax = mean.samples + se.samples, ymin = mean.samples - se.samples)) +
-  geom_bar(stat = "identity")
+# Generate summary figures
+samps.summary <- samps %>% group_by(locality, strata) %>% 
   
+  # mutate(minsamples = minsamples / totsamples ) +
+  
+  summarize(mean.samples = mean(minsamples), se.samples = plotrix::std.error(minsamples))
+
+ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill = strata)) +
+  geom_errorbar(aes(ymax = mean.samples + se.samples, ymin = mean.samples - se.samples), width = 0.3) +
+  geom_bar(stat = "identity") +
+  facet_grid(~ strata, scale = "free_y") +
+  scale_fill_manual(values = c("black", "dodgerblue3", "forestgreen")) +
+  labs(x = "", y = "Minimum number of samples") +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none"
+  )
