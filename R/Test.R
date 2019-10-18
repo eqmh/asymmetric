@@ -50,8 +50,11 @@ p2p <- do.call(rbind, lapply(files, function(l) {
 # Remove duplicate rows
 p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
 
+# Write csv
+write.csv(p2p, "C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/2019-10-18 P2P optimization analysis master file.csv")
+
 # Read in site lat/longs
-sites <- read.csv("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/sites.csv", header = T)
+# sites <- read.csv("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/sites.csv", header = T)
 
 #####-----------------------------------------------------------------------------------------------
 
@@ -200,11 +203,12 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
   
   # mutate(minsamples = minsamples / totsamples ) +
   
-  summarize(mean.samples = mean(minsamples), se.samples = plotrix::std.error(minsamples))
+  summarize(mean.samples = mean(minsamples), se.samples = plotrix::std.error(minsamples), totsamples = mean(totsamples))
 
 ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill = strata)) +
   geom_errorbar(aes(ymax = mean.samples + se.samples, ymin = mean.samples - se.samples), width = 0.3) +
   geom_bar(stat = "identity") +
+  geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 2) +
   facet_grid(~ strata, scale = "free_y") +
   scale_fill_manual(values = c("black", "dodgerblue3", "forestgreen")) +
   labs(x = "", y = "Minimum number of samples") +
