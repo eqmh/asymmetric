@@ -28,7 +28,7 @@ files <- files[-2]
 p2p <- do.call(rbind, lapply(files, function(l) {
   
   # read in data
-  dat <- read.csv(paste0("C:/Users/Enrique/Documents/asymmetric/data", l))
+  dat <- read.csv(paste0("C:/Users/Enrique/Documents/asymmetric/data/", l))
   
   # take only the present species
   dat <- subset(dat, occurrenceStatus == "present")
@@ -51,7 +51,7 @@ p2p <- do.call(rbind, lapply(files, function(l) {
 p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
 
 # Read in site lat/longs
-sites <- read.csv("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/sites.csv", header = T)
+sites <- read.csv("C:/Users/Enrique/Documents/asymmetric/data/sites.csv", header = T)
 
 #####-----------------------------------------------------------------------------------------------
 
@@ -191,7 +191,7 @@ samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 
 samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
-samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN", "CONCEPCI?"N", "RE?'ACA,VI?'ADELMAR",
+samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN", "CONCEPCIÃ“N", "REÃ‘ACA,VIÃ‘ADELMAR",
                                                       "ARRAIALDOCABO", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", 
                                                       "NORTHERNMA", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
 
