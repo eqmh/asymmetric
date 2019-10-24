@@ -4,13 +4,13 @@
 
 #####-----------------------------------------------------------------------------------------------
 
-## THIS IS A TEST
+setwd("~/asymmetric")
 
 # Load required libraries
 library(iNEXT)
 library(tidyverse)
 
-source("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/R/covstop.R")
+source("data")
 
 # finch::dwca_read(..., read = TRUE)
 
