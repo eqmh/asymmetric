@@ -4,6 +4,8 @@
 
 #####-----------------------------------------------------------------------------------------------
 
+## THIS IS A TEST
+
 # Load required libraries
 library(iNEXT)
 library(tidyverse)
@@ -191,7 +193,7 @@ samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 
 samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
-samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN", "CONCEPCIÃ"N", "REÃ'ACA,VIÃ'ADELMAR",
+samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN", "CONCEPCI?"N", "RE?'ACA,VI?'ADELMAR",
                                                       "ARRAIALDOCABO", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", 
                                                       "NORTHERNMA", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
 
