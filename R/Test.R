@@ -4,13 +4,11 @@
 
 #####-----------------------------------------------------------------------------------------------
 
-setwd("~/asymmetric")
-
 # Load required libraries
 library(iNEXT)
 library(tidyverse)
 
-source("data")
+source("C:/Users/Enrique/Documents/asymmetric/R/covstop.R")
 
 # finch::dwca_read(..., read = TRUE)
 
@@ -22,7 +20,7 @@ source("data")
 
 # Read in data
 
-files <- list.files("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data")
+files <- list.files("C:/Users/Enrique/Documents/asymmetric/data")
 
 # remove weird locality
 files <- files[-2]
@@ -30,7 +28,7 @@ files <- files[-2]
 p2p <- do.call(rbind, lapply(files, function(l) {
   
   # read in data
-  dat <- read.csv(paste0("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/", l))
+  dat <- read.csv(paste0("C:/Users/Enrique/Documents/asymmetric/data", l))
   
   # take only the present species
   dat <- subset(dat, occurrenceStatus == "present")
