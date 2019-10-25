@@ -4,7 +4,7 @@
 
 #####-----------------------------------------------------------------------------------------------
 
-#### THIS IS A TEST USING GIT COMMAND
+#### TESTING GIT PULL COMMAND
 
 # Load required libraries
 library(iNEXT)
