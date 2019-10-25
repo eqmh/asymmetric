@@ -51,19 +51,19 @@ p2p <- do.call(rbind, lapply(files, function(l) {
 p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
 
 # Read in site lat/longs
-sites <- read.csv("C:/Users/Enrique/Documents/asymmetric/data/sites.csv", header = T)
+# sites <- read.csv("C:/Users/Enrique/Documents/asymmetric/data/sites.csv", header = T)
 
 #####-----------------------------------------------------------------------------------------------
 
 # Generate interpolation/extrapolation curves for each locality (or site)
 
 rare <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
-  
+
   x <- subset(p2p, locality == i)
   
-  # do.call(rbind, lapply(unique(p2p$site), function(j) {
-  
-  # x <- subset(p2p, site == j)
+   # do.call(rbind, lapply(unique(p2p$site), function(j) {
+   # 
+   # x <- subset(p2p, site == j)
     
     do.call(rbind, lapply(unique(p2p$strata), function(k) {
   
@@ -131,11 +131,26 @@ rare <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 
 rare$strata <- factor(rare$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
-# Plot results
+# # Plot results
+# ggplot() +
+#   geom_line(data = subset(rare, method == "interpolated"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata)) +
+#   geom_line(data = subset(rare, method == "extrapolated"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata), lty = 3) +
+#   geom_point(data = subset(rare, method == "observed"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata), size = 2) +
+#   scale_color_manual(values = c("black", "dodgerblue3", "forestgreen")) +
+#   labs(x = "Number of samples", y = "Species richness") +
+#   facet_grid( ~ strata, scales = "free_x") +
+#   theme_bw(base_size = 12) +
+#   theme(
+#     panel.grid.major = element_blank(),
+#     panel.grid.minor = element_blank(),
+#     legend.position = "none"
+#   )
+
+# Plot results (without sites)
 ggplot() +
-  geom_line(data = subset(rare, method == "interpolated"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata)) +
-  geom_line(data = subset(rare, method == "extrapolated"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata), lty = 3) +
-  geom_point(data = subset(rare, method == "observed"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata), size = 2) +
+  geom_line(data = subset(rare, method == "interpolated"), aes(x = t, y = qD, group = paste(locality, strata), col = strata)) +
+  geom_line(data = subset(rare, method == "extrapolated"), aes(x = t, y = qD, group = paste(locality, strata), col = strata), lty = 3) +
+  geom_point(data = subset(rare, method == "observed"), aes(x = t, y = qD, group = paste(locality, strata), col = strata), size = 2) +
   scale_color_manual(values = c("black", "dodgerblue3", "forestgreen")) +
   labs(x = "Number of samples", y = "Species richness") +
   facet_grid( ~ strata, scales = "free_x") +
@@ -145,7 +160,6 @@ ggplot() +
     panel.grid.minor = element_blank(),
     legend.position = "none"
   )
-
 
 #####-----------------------------------------------------------------------------------------------
 
