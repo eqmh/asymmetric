@@ -8,7 +8,11 @@
 library(iNEXT)
 library(tidyverse)
 
-source("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/R/covstop.R")
+setwd("C:/Users/jslef/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/")
+# enrique change this for your local siles
+
+# Load function to compute coverage-based stopping
+source("./R/covstop.R")
 
 # finch::dwca_read(..., read = TRUE)
 
@@ -20,7 +24,7 @@ source("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/a
 
 # Read in data
 
-files <- list.files("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data")
+files <- list.files("./data")
 
 # remove weird locality
 files <- files[-2]
@@ -28,7 +32,7 @@ files <- files[-2]
 p2p <- do.call(rbind, lapply(files, function(l) {
   
   # read in data
-  dat <- read.csv(paste0("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/", l))
+  dat <- read.csv(paste0("./data/", l))
   
   # take only the present species
   dat <- subset(dat, occurrenceStatus == "present")
@@ -51,10 +55,10 @@ p2p <- do.call(rbind, lapply(files, function(l) {
 p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
 
 # Write csv
-write.csv(p2p, "C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/2019-10-18 P2P optimization analysis master file.csv")
+write.csv(p2p, "./sites.csv")
 
 # Read in site lat/longs
-# sites <- read.csv("C:/Users/lefcheckj/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/data/sites.csv", header = T)
+sites <- read.csv("./sites.csv", header = T)
 
 #####-----------------------------------------------------------------------------------------------
 
@@ -135,10 +139,10 @@ rare <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 rare$strata <- factor(rare$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
 # Plot results
-ggplot() +
-  geom_line(data = subset(rare, method == "interpolated"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata)) +
-  geom_line(data = subset(rare, method == "extrapolated"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata), lty = 3) +
-  geom_point(data = subset(rare, method == "observed"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata), size = 2) +
+(rareplot <- ggplot() +
+  geom_line(data = subset(rare, method == "interpolated"), aes(x = t, y = qD, group = paste(locality, strata), col = strata)) +
+  geom_line(data = subset(rare, method == "extrapolated"), aes(x = t, y = qD, group = paste(locality, strata), col = strata), lty = 3) +
+  geom_point(data = subset(rare, method == "observed"), aes(x = t, y = qD, group = paste(locality, strata), col = strata), size = 2) +
   scale_color_manual(values = c("black", "dodgerblue3", "forestgreen")) +
   labs(x = "Number of samples", y = "Species richness") +
   facet_grid( ~ strata, scales = "free_x") +
@@ -148,7 +152,9 @@ ggplot() +
     panel.grid.minor = element_blank(),
     legend.position = "none"
   )
+)
 
+ggsave("./output/Rarefaction plot.pdf", rareplot, device = "pdf", width = 10, height = 5, units = "in")
 
 #####-----------------------------------------------------------------------------------------------
 
@@ -194,7 +200,7 @@ samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 
 samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
-samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN", "CONCEPCIÃ"N", "REÃ'ACA,VIÃ'ADELMAR",
+samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN",  "CONCEPCIÃ"N", "REÃ'ACA,VIÃ'ADELMAR",
                                                       "ARRAIALDOCABO", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", 
                                                       "NORTHERNMA", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
 
@@ -205,7 +211,7 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
   
   summarize(mean.samples = mean(minsamples), se.samples = plotrix::std.error(minsamples), totsamples = mean(totsamples))
 
-ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill = strata)) +
+(stopplot <- ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill = strata)) +
   geom_errorbar(aes(ymax = mean.samples + se.samples, ymin = mean.samples - se.samples), width = 0.3) +
   geom_bar(stat = "identity") +
   geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 2) +
@@ -219,3 +225,6 @@ ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill =
     panel.grid.minor = element_blank(),
     legend.position = "none"
   )
+)
+
+ggsave("./output/Stopping plot.pdf", stopplot, device = "pdf", width = 11, height = 6, units = "in")
