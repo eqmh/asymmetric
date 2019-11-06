@@ -8,7 +8,7 @@
 library(iNEXT)
 library(tidyverse)
 
-setwd("C:/Users/jslef/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/")
+# setwd(path = "C:/Users/jslef/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/")
 # enrique change this for your local siles
 
 # Load function to compute coverage-based stopping
@@ -200,7 +200,7 @@ samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 
 samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
-samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN",  "CONCEPCIÃ"N", "REÃ'ACA,VIÃ'ADELMAR",
+samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN",  "CONCEPCION", "REÃ‘ACA","VIÃ‘ADELMAR",
                                                       "ARRAIALDOCABO", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", 
                                                       "NORTHERNMA", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
 
