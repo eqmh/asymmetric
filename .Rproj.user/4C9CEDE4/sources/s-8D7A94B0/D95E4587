@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1575038231393.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D95E4587",
+    "lastKnownWriteTime" : 1575039797,
+    "last_content_update" : 1575039797614,
+    "path" : "~/asymmetric/R/Test.R",
+    "project_path" : "R/Test.R",
+    "properties" : {
+        "cursorPosition" : "49,0",
+        "scrollLine" : "39"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
