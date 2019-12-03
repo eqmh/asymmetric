@@ -26,8 +26,8 @@ source("./R/covstop.R")
 
 files <- list.files("./data")
 
-# remove weird locality
-files <- files[-2]
+# # remove weird locality
+# files <- files[-2]
 
 p2p <- do.call(rbind, lapply(files, function(l) {
   
@@ -200,9 +200,9 @@ samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 
 samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
-samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN",  "CONCEPCION", "REÑACA","VIÑADELMAR",
-                                                      "ARRAIALDOCABO", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", 
-                                                      "NORTHERNMA", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
+samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN",  "CONCEPCIÃ“N", "REÃ‘ACA,VIÃ‘ADELMAR",
+                                                      "APACOSTADASALGAS", "ARRAIALDOCABO", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", 
+                                                      "NORTHERNMA", "BIDDEFORD", "MASSACHUSETTS" ,"GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
 
 # Generate summary figures
 samps.summary <- samps %>% group_by(locality, strata) %>% 
