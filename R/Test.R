@@ -208,8 +208,8 @@ samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
 samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN", "CONCEPCIÃ“N", "REÃ‘ACA,VIÃ‘ADELMAR",
-                                                      "ARRAIALDOCABO", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", 
-                                                      "NORTHERNMA", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
+                                                    "APACOSTADASALGAS","ARRAIALDOCABO", "FERNANDODENORONHA", "SANTACRUZ","ISLAGORGONA", "MASSACHUSETTS", 
+                                                      "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
 
 # Generate summary figures
 samps.summary <- samps %>% group_by(locality, strata) %>% 
