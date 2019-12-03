@@ -1,0 +1,233 @@
+####-----------------------------------------------------------------------------------------------
+####                      OPTIMIZATION OF ROCKY SHORE SAMPLING FROM P2P                           #
+####-----------------------------------------------------------------------------------------------
+
+#####-----------------------------------------------------------------------------------------------
+
+#### TESTING GIT PULL COMMAND
+
+# Load required libraries
+library(iNEXT)
+library(tidyverse)
+
+source("~/asymmetric/R/covstop.R")
+
+# finch::dwca_read(..., read = TRUE)
+
+## TO DO ##
+# generate rarefaction curves
+# also run collapsing by locality
+
+#####-----------------------------------------------------------------------------------------------
+
+# Read in data
+
+files <- list.files("~/asymmetric/data/")
+
+# remove weird locality
+# files <- files[-2]
+
+p2p <- do.call(rbind, lapply(files, function(l) {
+  
+  # read in data
+  dat <- read.csv(paste0("~/asymmetric/data/", l))
+  
+  # take only the present species
+  dat <- subset(dat, occurrenceStatus == "present")
+  
+  # split metadata
+  meta <- do.call(rbind.data.frame, strsplit(as.character(dat$eventID), "\\_"))
+  
+  names(meta) <- c("country", "locality", "site", "date", "strata", "quadrat")
+  
+  taxa <- do.call(rbind.data.frame, strsplit(as.character(dat$scientificNameID), "\\:"))[, 5]
+  
+  # bind back in
+  data <- cbind.data.frame(eventID = dat$eventID, meta, taxa)
+  
+  return(data)
+  
+} ) )
+
+# Remove duplicate rows
+p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
+
+# Read in site lat/longs
+# sites <- read.csv("~/asymmetric/data/sites.csv", header = T)
+
+#####-----------------------------------------------------------------------------------------------
+
+# Generate interpolation/extrapolation curves for each locality (or site)
+
+rare <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
+
+  x <- subset(p2p, locality == i)
+  
+   # do.call(rbind, lapply(unique(p2p$site), function(j) {
+   # 
+   # x <- subset(p2p, site == j)
+    
+    do.call(rbind, lapply(unique(p2p$strata), function(k) {
+  
+      print(paste(i, k))
+      
+      x <- subset(x, strata == k)
+      
+      if(nrow(x) == 0) data.frame() else {
+        
+        # summarize by locality
+        x$presence <- 1
+        
+        # x <- x %>% group_by(locality, site, strata, taxa) %>% summarize(presence = sum(presence))
+          
+        # Cast longways
+        mat <- x %>% select(site, quadrat, taxa, presence) %>% 
+          
+          pivot_wider(id_cols = c(site, quadrat), names_from = taxa, values_from = presence) 
+        
+        mat[is.na(mat)] <- 0
+        
+        dnames <- list(colnames(mat)[-(1:2)], as.character(mat$site))
+        
+        mat <- t(as.matrix(mat)[, -(1:2), drop = FALSE])
+        
+        mat <- apply(mat, 2, as.numeric)
+        
+        dimnames(mat) <- dnames
+        
+        # z <- c(sum(mat), apply(mat, 1, sum))
+        
+        z <- as.incfreq(mat)
+        
+        out <- iNEXT(z, datatype = "incidence_freq")
+        
+        ret <- out$iNextEst
+        
+        idx <- which(ret$method == "observed")
+        
+        ret <- rbind.data.frame(
+          ret[ret$method == "interpolated", ],
+          ret[idx, ],
+          ret[idx, ],
+          ret[idx, ],
+          ret[ret$method == "extrapolated", ]
+        )
+        
+        ret[idx, "method"] <- "interpolated"
+        
+        ret[idx + 2, "method"] <- "extrapolated"
+      
+        data.frame(
+          locality = i,
+          strata = k,
+          ret[, c(1:2, 4)]
+        )
+        
+      }
+      
+      } ) )
+    
+    } ) )
+  
+  # } ) )
+
+rare$strata <- factor(rare$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
+
+# # Plot results
+# ggplot() +
+#   geom_line(data = subset(rare, method == "interpolated"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata)) +
+#   geom_line(data = subset(rare, method == "extrapolated"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata), lty = 3) +
+#   geom_point(data = subset(rare, method == "observed"), aes(x = t, y = qD, group = paste(locality, site, strata), col = strata), size = 2) +
+#   scale_color_manual(values = c("black", "dodgerblue3", "forestgreen")) +
+#   labs(x = "Number of samples", y = "Species richness") +
+#   facet_grid( ~ strata, scales = "free_x") +
+#   theme_bw(base_size = 12) +
+#   theme(
+#     panel.grid.major = element_blank(),
+#     panel.grid.minor = element_blank(),
+#     legend.position = "none"
+#   )
+
+# Plot results (without sites)
+ggplot() +
+  geom_line(data = subset(rare, method == "interpolated"), aes(x = t, y = qD, group = paste(locality, strata), col = strata)) +
+  geom_line(data = subset(rare, method == "extrapolated"), aes(x = t, y = qD, group = paste(locality, strata), col = strata), lty = 3) +
+  geom_point(data = subset(rare, method == "observed"), aes(x = t, y = qD, group = paste(locality, strata), col = strata), size = 2) +
+  scale_color_manual(values = c("black", "dodgerblue3", "forestgreen")) +
+  labs(x = "Number of samples", y = "Species richness") +
+  facet_grid( ~ strata, scales = "free_x") +
+  theme_bw(base_size = 12) +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none"
+  )
+
+#####-----------------------------------------------------------------------------------------------
+
+# Run coverage optimization
+samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
+  
+  x <- subset(p2p, locality == as.character(i)) 
+  
+  do.call(rbind, lapply(unique(x$site), function(j) {
+  
+    x <- subset(x, site == as.character(j)) 
+    
+    do.call(rbind, lapply(unique(x$strata), function(k) {
+    
+      print(paste(i, j, k))
+      
+      x <- subset(x, strata == as.character(k))
+      
+      if(nrow(x) == 0) data.frame() else {
+    
+        x$presence <- 1
+      
+        # Cast longways
+        mat <- x %>% select(quadrat, taxa, presence) %>% 
+        
+          pivot_wider(id_cols = quadrat, names_from = taxa, values_from = presence) 
+        
+        mat[is.na(mat)] <- 0
+    
+        data.frame(
+          x[1, 1:6],
+          totsamples = nrow(mat),
+          minsamples = covstop(mat[, -1])
+        )
+        
+      }
+      
+      } ) )
+    
+  } ) )
+  
+} ) )
+
+samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
+
+samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN", "CONCEPCIÃ“N", "REÃ‘ACA,VIÃ‘ADELMAR",
+                                                    "APACOSTADASALGAS","ARRAIALDOCABO", "FERNANDODENORONHA", "SANTACRUZ","ISLAGORGONA", "MASSACHUSETTS", 
+                                                      "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
+
+# Generate summary figures
+samps.summary <- samps %>% group_by(locality, strata) %>% 
+  
+  # mutate(minsamples = minsamples / totsamples ) +
+  
+  summarize(mean.samples = mean(minsamples), se.samples = plotrix::std.error(minsamples))
+
+ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill = strata)) +
+  geom_errorbar(aes(ymax = mean.samples + se.samples, ymin = mean.samples - se.samples), width = 0.3) +
+  geom_bar(stat = "identity") +
+  facet_grid(~ strata, scale = "free_y") +
+  scale_fill_manual(values = c("black", "dodgerblue3", "forestgreen")) +
+  labs(x = "", y = "Minimum number of samples") +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none"
+  )
