@@ -154,7 +154,25 @@ rare$strata <- factor(rare$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
   )
 )
 
+
 ggsave("./output/Rarefaction plot.pdf", rareplot, device = "pdf", width = 10, height = 5, units = "in")
+
+# Plot results with curves colored according to locality  
+(rareplot_1 <- ggplot() +
+  geom_line(data = subset(rare, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality)) + 
+  geom_line(data = subset(rare, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3) + 
+  geom_point(data = subset(rare, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), size = 2) + 
+  ylim(0, 65) + 
+  labs(x = "Number of samples", y = "Species richness") + 
+  facet_grid( ~ strata, scales = "free_x") + 
+  theme_bw(base_size = 14) +
+  theme(
+      # panel.grid.major = element_blank(),
+      # panel.grid.minor = element_blank(),
+      legend.position = "none"
+  )
+)
+  
 
 #####-----------------------------------------------------------------------------------------------
 
