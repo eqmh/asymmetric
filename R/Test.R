@@ -167,12 +167,13 @@ ggsave("./output/Rarefaction plot.pdf", rareplot, device = "pdf", width = 10, he
   facet_grid( ~ strata, scales = "free_x") + 
   theme_bw(base_size = 14) +
   theme(
-      # panel.grid.major = element_blank(),
-      # panel.grid.minor = element_blank(),
-      legend.position = "none"
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      # legend.position = "none"
   )
 )
-  
+
+ggsave("./output/Rarefaction plot 2.pdf", rareplot_1, device = "pdf", width = 10, height = 5, units = "in")  
 
 #####-----------------------------------------------------------------------------------------------
 
@@ -236,7 +237,7 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
   facet_grid(~ strata, scale = "free_y") +
   scale_fill_manual(values = c("black", "dodgerblue3", "forestgreen")) +
   labs(x = "", y = "Minimum number of samples") +
-  theme_bw(base_size = 12) +
+  theme_bw(base_size = 14) +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.grid.major = element_blank(),
