@@ -46,11 +46,11 @@ for ( i in 1:length(files)){
   
   h.par<-assempar(data = dat.h, type = "cover", Sest.method = "chao")
   
-  # Simulation of 1o data sets, each one with 100 potential sampling units  and 10 sites
+  # Simulation of 100 data sets, each one with 100 potential sampling units  and 30 sites
   
   h.sim<-simdata(Par = h.par, cases = cases, n = n, sites = sites)
   
-  # Sampling and estimation of multse for each data set (this step will take 6-8 minutes)
+  # Sampling and estimation of multse for each data set units  and 30 sites
   h.samp<-sampsd(dat.sim = h.sim, Par = h.par, transformation = "fourth root",
                  method = "bray", multi.site = TRUE, n = n, p.n = p.n,
                  sites = sites, p.s = p.s, k = k)
@@ -65,11 +65,11 @@ for ( i in 1:length(files)){
   
   m.par<-assempar(data = dat.m, type = "cover", Sest.method = "chao")
   
-  # Simulation of 1o data sets, each one with 100 potential sampling units  and 10 sites
+  # Simulation of 100 data sets, each one with 100 potential sampling units  and 30 sites
   
   m.sim<-simdata(Par = m.par, cases = cases, n = n, sites = sites)
   
-  # Sampling and estimation of multse for each data set (this step will take 6-8 minutes)
+  # Sampling and estimation of multse for each data set 
   m.samp<-sampsd(dat.sim = m.sim, Par = m.par, transformation = "fourth root",
                  method = "bray", multi.site = TRUE, n = n, p.n = p.n,
                  sites = sites, p.s = p.s, k = k)
@@ -85,11 +85,11 @@ for ( i in 1:length(files)){
   
   l.par<-assempar(data = dat.l, type = "cover", Sest.method = "chao")
   
-  # Simulation of 1o data sets, each one with 100 potential sampling units  and 10 sites
+  # Simulation of 100 data sets, each one with 100 potential sampling units  and 30 sites
   
   l.sim<-simdata(Par = l.par, cases = cases, n = n, sites = sites)
   
-  # Sampling and estimation of multse for each data set (this step will take 6-8 minutes)
+  # Sampling and estimation of multse for each data set 
   l.samp<-sampsd(dat.sim = l.sim, Par = l.par, transformation = "fourth root",
                  method = "bray", multi.site = TRUE, n = n, p.n = p.n,
                  sites = sites, p.s = p.s, k = k)
@@ -143,11 +143,11 @@ for ( i in 1:length(files)){
   
   h.par<-assempar(data = dat.h, type = "cover", Sest.method = "chao")
   
-  # Simulation of 1o data sets, each one with 100 potential sampling units  and 10 sites
+  # Simulation of 100 data sets, each one with 100 potential sampling units  and 30 sites
   
   h.sim<-simdata(Par = h.par, cases = cases, n = n, sites = sites)
   
-  # Sampling and estimation of multse for each data set (this step will take 6-8 minutes)
+  # Sampling and estimation of multse for each data set 
   h.samp<-sampsd(dat.sim = h.sim, Par = h.par, transformation = "fourth root",
                  method = "bray", multi.site = FALSE, n = n, p.n = p.n, k = k)
   
@@ -161,11 +161,11 @@ for ( i in 1:length(files)){
   
   m.par<-assempar(data = dat.m, type = "cover", Sest.method = "chao")
   
-  # Simulation of 1o data sets, each one with 100 potential sampling units  and 10 sites
+  # Simulation of 100 data sets, each one with 100 potential sampling units  and 30 sites
   
   m.sim<-simdata(Par = m.par, cases = cases, n = n, sites = sites)
   
-  # Sampling and estimation of multse for each data set (this step will take 6-8 minutes)
+  # Sampling and estimation of multse for each data set 
   m.samp<-sampsd(dat.sim = m.sim, Par = m.par, transformation = "fourth root",
                  method = "bray", multi.site = FALSE, n = n, p.n = p.n, k = k)
   
@@ -180,11 +180,11 @@ for ( i in 1:length(files)){
   
   l.par<-assempar(data = dat.l, type = "cover", Sest.method = "chao")
   
-  # Simulation of 1o data sets, each one with 100 potential sampling units  and 10 sites
+  # Simulation of 100 data sets, each one with 100 potential sampling units  and 30 sites
   
   l.sim<-simdata(Par = l.par, cases = cases, n = n, sites = sites)
   
-  # Sampling and estimation of multse for each data set (this step will take 6-8 minutes)
+  # Sampling and estimation of multse for each data set 
   l.samp<-sampsd(dat.sim = l.sim, Par = l.par, transformation = "fourth root",
                  method = "bray", multi.site = FALSE, n = n, p.n = p.n, k = k)
   
@@ -240,11 +240,11 @@ for ( i in 1:length(files)){
   
   h.par<-assempar(data = dat.h, type = "cover", Sest.method = "chao")
   
-  # Simulation of 1o data sets, each one with 100 potential sampling units  and 10 sites
+  # Simulation of 100 data sets, each one with 100 potential sampling units  and 30 sites
   
   h.sim<-simdata(Par = h.par, cases = cases, n = n, sites = sites)
   
-  # Sampling and estimation of multse for each data set (this step will take 6-8 minutes)
+  # Sampling and estimation of multse for each data set 
   h.samp<-sampsd(dat.sim = h.sim, Par = h.par, transformation = "fourth root",
                  method = "bray", multi.site = TRUE, n = n, p.n = p.n,
                  sites = sites, p.s = p.s, k = k)
@@ -259,11 +259,11 @@ for ( i in 1:length(files)){
   
   m.par<-assempar(data = dat.m, type = "cover", Sest.method = "chao")
   
-  # Simulation of 1o data sets, each one with 100 potential sampling units  and 10 sites
+  # Simulation of 100 data sets, each one with 100 potential sampling units  and 30 sites
   
   m.sim<-simdata(Par = m.par, cases = cases, n = n, sites = sites)
   
-  # Sampling and estimation of multse for each data set (this step will take 6-8 minutes)
+  # Sampling and estimation of multse for each data set 
   m.samp<-sampsd(dat.sim = m.sim, Par = m.par, transformation = "fourth root",
                  method = "bray", multi.site = TRUE, n = n, p.n = p.n,
                  sites = sites, p.s = p.s, k = k)
