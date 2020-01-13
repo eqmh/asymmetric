@@ -13,16 +13,16 @@ library(ggplot2)
 
 ############ Localities with more than one site, all tide levels##########
 #Set as working directory the folder "multiple"
-setwd("C:/Users/Edlin/OneDrive/Documents/MBON - P2P/mbon_pole2pole/multiple")
+setwd("~/asymmetric/SSP_P2P/multiple")
 
 files <- list.files()
 
-n = 100 
-cases = 100 
-sites = 30
-p.n = 30
-p.s = 20
-k = 100
+n = 100 # 100 
+cases = 20 # 100 
+sites = 30 # 30 
+p.n = 30 # 30 
+p.s = 20 # 20 
+k = 10 # 100 
 
 for ( i in 1:length(files)){
   
@@ -111,15 +111,16 @@ for ( i in 1:length(files)){
 
 ############# Localities with one site ###################################
 #Set as working directory the folder "single"
-setwd("C:/Users/Edlin/OneDrive/Documents/MBON - P2P/mbon_pole2pole/single")
+setwd("~/asymmetric/SSP_P2P/single")
 
 files <- list.files()
 
-n = 100
-cases = 100
-sites = 1
-p.n = 30
-k = 100
+n = 100 # 100 
+cases = 20 # 100 
+sites = 30 # 30 
+p.n = 30 # 30 
+p.s = 20 # 20 
+k = 10 # 100
 
 for ( i in 1:length(files)){
   
@@ -206,16 +207,16 @@ for ( i in 1:length(files)){
 
 ############# US sites####################################################
 #Set as working directory the folder "USA"
-setwd("C:/Users/Edlin/OneDrive/Documents/MBON - P2P/mbon_pole2pole/USA")
+setwd("~/asymmetric/SSP_P2P/USA")
 
 files <- list.files()
-
-n = 100
-cases = 100
-sites = 30
-p.n = 30
-p.s = 20
-k = 100
+ 
+n = 100 # 100 
+cases = 20 # 100 
+sites = 30 # 30 
+p.n = 30 # 30 
+p.s = 20 # 20 
+k = 10 # 100
 
 
 for ( i in 1:length(files)){
@@ -287,7 +288,7 @@ for ( i in 1:length(files)){
 
 ########## Plot MultSE ###################################################
 #Set as working directory the folder "SSP.output"
-setwd("C:/Users/Edlin/OneDrive/Documents/MBON - P2P/mbon_pole2pole/SSP.output")
+setwd("~/asymmetric/SSP_P2P/SSP.output")
 
 output<-list.files()
 
