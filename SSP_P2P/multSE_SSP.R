@@ -322,6 +322,7 @@ plot.1<-ggplot(multse.samples, aes(x=samples, y=mean, colour = locality))+
         panel.border = element_rect(size=0.4),
         axis.ticks= element_line(size=0.2))
 
+windows()
 plot.1  + geom_abline(slope = 0, intercept = 0.1, colour = "blue")
 
 #Plot for number of sites
@@ -345,5 +346,6 @@ plot.2<-ggplot(multse.sites, aes(x=samples, y=mean, colour = locality))+
         panel.border = element_rect(size=0.4),
         axis.ticks= element_line(size=0.2))
 
+windows()
 plot.2+ geom_abline(slope = 0, intercept = 0.1, colour = "blue")
 
