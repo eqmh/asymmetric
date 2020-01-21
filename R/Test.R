@@ -10,9 +10,10 @@ library(tidyverse)
 
 # setwd(path = "C:/Users/jslef/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/")
 # enrique change this for your local siles
+setwd("~/asymmetric")
 
 # Load function to compute coverage-based stopping
-source("./R/covstop.R")
+source("R/covstop.R")
 
 # finch::dwca_read(..., read = TRUE)
 
@@ -175,6 +176,45 @@ ggsave("./output/Rarefaction plot.pdf", rareplot, device = "pdf", width = 10, he
 
 ggsave("./output/Rarefaction plot 2.pdf", rareplot_1, device = "pdf", width = 10, height = 5, units = "in")  
 
+### This plots individual sites
+
+sel_locality = "NORTHERNMA"
+
+(rareplot_1 <- ggplot() +
+    geom_line(data = subset(rare, method == "interpolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata))) + 
+    geom_line(data = subset(rare, method == "extrapolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata)), lty = 3) + 
+    geom_point(data = subset(rare, method == "observed" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata)), size = 2) + 
+    ylim(0, 65) + 
+    xlim(0, 80) + 
+    labs(x = "Number of samples", y = "Species richness") + 
+    facet_grid( ~ strata, scales = "free_x") + 
+    theme_bw(base_size = 14) +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      # legend.position = "none"
+    )
+)
+
+### Delete rows from specific localities 'rare' data frame
+rare2 <- rare[!grepl("MASSACHUSETTS", rare$locality),]
+
+# Plot results with curves colored according to locality  
+(rareplot_1 <- ggplot() +
+    geom_line(data = subset(rare2, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality)) + 
+    geom_line(data = subset(rare2, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3) + 
+    geom_point(data = subset(rare2, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), size = 2) + 
+    ylim(0, 65) + 
+    labs(x = "Number of samples", y = "Species richness") + 
+    facet_grid( ~ strata, scales = "free_x") + 
+    theme_bw(base_size = 14) +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      # legend.position = "none"
+    )
+)
+
 #####-----------------------------------------------------------------------------------------------
 
 # Run coverage optimization
@@ -239,7 +279,7 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
   labs(x = "", y = "Minimum number of samples") +
   theme_bw(base_size = 14) +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.x = element_text(angle = 90, hjust = 1),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     legend.position = "none"
