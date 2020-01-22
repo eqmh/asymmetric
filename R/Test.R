@@ -196,8 +196,8 @@ sel_locality = "NORTHERNMA"
     )
 )
 
-### Delete rows from specific localities 'rare' data frame
-rare2 <- rare[!grepl("MASSACHUSETTS", rare$locality),]
+### Delete rows from specific localities in 'rare' data frame
+rare2 <- rare[!grepl("MASSACHUSETTS", rare$locality),] ### this allowes to generate 'rare_plot_2'
 
 # Plot results with curves colored according to locality  
 (rareplot_1 <- ggplot() +
@@ -216,6 +216,9 @@ rare2 <- rare[!grepl("MASSACHUSETTS", rare$locality),]
 )
 
 #####-----------------------------------------------------------------------------------------------
+
+### Delete rows from specific localities in 'samps' data frame
+p2p <- p2p[!grepl("MASSACHUSETTS", p2p$locality),] ### this allowes to generate 'stopping_plot_3'
 
 # Run coverage optimization
 samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
@@ -260,8 +263,8 @@ samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
 samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
 samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN",  "CONCEPCIÃ“N", "REÃ‘ACA,VIÃ‘ADELMAR",
-                                                      "APACOSTADASALGAS", "ARRAIALDOCABO", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", 
-                                                      "NORTHERNMA", "BIDDEFORD", "MASSACHUSETTS" ,"GIANTSTAIRS", "CHAMBERLAIN", "CENTRALMAINE", "MAINE"))
+                                                       "ARRAIALDOCABO", "APACOSTADASALGAS", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", 
+                                                      "NORTHERNMA", "BIDDEFORD","GIANTSTAIRS", "CHAMBERLAIN", "MAINE", "CENTRALMAINE"))
 
 # Generate summary figures
 samps.summary <- samps %>% group_by(locality, strata) %>% 
@@ -273,7 +276,7 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
 (stopplot <- ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill = strata)) +
   geom_errorbar(aes(ymax = mean.samples + se.samples, ymin = mean.samples - se.samples), width = 0.3) +
   geom_bar(stat = "identity") +
-  geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 2) +
+  geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 5) +
   facet_grid(~ strata, scale = "free_y") +
   scale_fill_manual(values = c("black", "dodgerblue3", "forestgreen")) +
   labs(x = "", y = "Minimum number of samples") +
@@ -287,3 +290,9 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
 )
 
 ggsave("./output/Stopping plot.pdf", stopplot, device = "pdf", width = 11, height = 6, units = "in")
+
+### This extracts maximum values of extrapolated richness from each locality
+max_extra <- filter(rare2, method == "extrapolated" & locality == "ISLAGORGONA")
+max(max_extra$qD)
+
+
