@@ -215,6 +215,16 @@ rare2 <- rare[!grepl("MASSACHUSETTS", rare$locality),] ### this allowes to gener
     )
 )
 
+### Calculate % coverage based on observed number of species and maximum extrapolated values
+
+sel_site = "ANTARTICA"
+tide_stratum = "MIDTIDE"
+inter_data <- subset(rare2, method == "interpolated" & strata == tide_stratum & locality == sel_site)
+extra_data <- subset(rare2, method == "extrapolated" & strata == tide_stratum & locality == sel_site)
+obs_data <- subset(rare2, method == "observed" & strata == tide_stratum & locality == sel_site)
+
+spp_cover <- obs_data$qD/max(extra_data$qD)
+
 #####-----------------------------------------------------------------------------------------------
 
 ### Delete rows from specific localities in 'samps' data frame
@@ -295,4 +305,10 @@ ggsave("./output/Stopping plot.pdf", stopplot, device = "pdf", width = 11, heigh
 max_extra <- filter(rare2, method == "extrapolated" & locality == "ISLAGORGONA")
 max(max_extra$qD)
 
+### This calculates the difference between minimum number of samples needed for 100% coverage and actual number of samples collected
 
+min_coverage <- samps.summary$mean.samples
+collected_samps <- samps.summary$totsamples
+
+diff_samps <- collected_samps - min_coverage
+frac_samps <- diff_samps/min_coverage
