@@ -312,3 +312,33 @@ collected_samps <- samps.summary$totsamples
 
 diff_samps <- collected_samps - min_coverage
 frac_samps <- diff_samps/min_coverage
+
+### covstop vs MultiSE
+
+covstop_data <- samps.summary[, c("locality", "strata", "mean.samples", "se.samples")]
+
+### use this for filtering by range value
+# multse_data <- multse.samples[, c("samples", "mean", "upper", "lower", "Strata", "locality")] %>% 
+#   filter(mean < 0.11) %>% filter(mean > 0.09) 
+
+### use this for filtering by single value
+multse_data <- multse.samples[, c("samples", "mean", "upper", "lower", "Strata", "locality")] %>% 
+  filter(mean < 0.11)
+ 
+multse_mean <- aggregate(multse_data$samples, by = list(multse_data$Strata, multse_data$locality), max)
+multse_mean <- aggregate(multse_data$samples, by = list(multse_data$Strata, multse_data$locality), mean)
+multse_sd <- aggregate(multse_data$samples, by = list(multse_data$Strata, multse_data$locality), sd)
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
