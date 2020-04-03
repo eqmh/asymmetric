@@ -156,7 +156,7 @@ rare$strata <- factor(rare$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 )
 
 
-ggsave("./output/Rarefaction plot.pdf", rareplot, device = "pdf", width = 10, height = 5, units = "in")
+# ggsave("./output/Rarefaction plot.pdf", rareplot, device = "pdf", width = 10, height = 5, units = "in")
 
 # Plot results with curves colored according to locality  
 (rareplot_1 <- ggplot() +
@@ -174,7 +174,7 @@ ggsave("./output/Rarefaction plot.pdf", rareplot, device = "pdf", width = 10, he
   )
 )
 
-ggsave("./output/Rarefaction plot 2.pdf", rareplot_1, device = "pdf", width = 10, height = 5, units = "in")  
+# ggsave("./output/Rarefaction plot 2.pdf", rareplot_1, device = "pdf", width = 10, height = 5, units = "in")  
 
 ### This plots individual sites
 
@@ -299,7 +299,7 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
   )
 )
 
-ggsave("./output/Stopping plot.pdf", stopplot, device = "pdf", width = 11, height = 6, units = "in")
+#ggsave("./output/Stopping plot.pdf", stopplot, device = "pdf", width = 11, height = 6, units = "in")
 
 ### This extracts maximum values of extrapolated richness from each locality
 max_extra <- filter(rare2, method == "extrapolated" & locality == "ISLAGORGONA")
@@ -323,7 +323,7 @@ covstop_data <- samps.summary[, c("locality", "strata", "mean.samples", "se.samp
 
 ### use this for filtering by single value (need to run multSE_SSP.R first to generate 'multse.samples')
 multse_data <- multse.samples[, c("samples", "mean", "upper", "lower", "Strata", "locality")] %>% 
-  filter(mean < 0.11)
+  filter(mean <= 0.125)
  
 multse_min <- aggregate(multse_data$samples, by = list(multse_data$Strata, multse_data$locality), min)
 # multse_mean <- aggregate(multse_data$samples, by = list(multse_data$Strata, multse_data$locality), mean)
