@@ -1,0 +1,21 @@
+,Country,Locality,Site,Strata,Littorina littorea,Littorina obtusata,Testudinalia testudinalis,Clathromorphum,Corallina officinalis,Dynamena,Hildenbrandia,Mastocarpus stellatus,Porphyra,Ulva intestinalis,Ulva lactuca,Chondrus crispus,Polysiphonia,Ascophyllum nodosum,Vertebrata lanosa,Dumontia contorta,Idotea balthica,Nucella lapillus,Carcinus maenas,Semibalanus balanoides
+1,USA,CENTRALMAINE,HAMILTONCOVE,hightide,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0
+2,USA,CENTRALMAINE,HAMILTONCOVE,hightide,1,0,0,1,1,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0
+3,USA,CENTRALMAINE,HAMILTONCOVE,hightide,1,1,1,1,0,1,0,1,0,0,1,1,0,0,0,0,0,0,0,0
+4,USA,CENTRALMAINE,HAMILTONCOVE,hightide,1,1,1,0,0,1,1,0,0,1,0,0,1,0,0,0,0,0,0,0
+5,USA,CENTRALMAINE,HAMILTONCOVE,hightide,1,1,1,0,1,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0
+6,USA,CENTRALMAINE,HAMILTONCOVE,midtide,1,1,1,0,0,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0
+7,USA,CENTRALMAINE,HAMILTONCOVE,midtide,1,1,1,1,0,1,1,1,0,0,1,1,0,1,1,0,0,0,0,0
+8,USA,CENTRALMAINE,HAMILTONCOVE,midtide,1,1,1,1,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,0
+9,USA,CENTRALMAINE,HAMILTONCOVE,midtide,1,0,1,1,1,1,0,1,0,0,1,0,0,0,0,1,0,0,0,0
+10,USA,CENTRALMAINE,HAMILTONCOVE,midtide,1,0,1,0,1,1,0,1,0,1,1,0,0,0,0,0,1,0,0,0
+11,USA,CENTRALMAINE,MOOSECOVE,midtide,0,0,0,0,0,1,0,1,0,1,1,0,0,0,0,0,1,0,0,0
+12,USA,CENTRALMAINE,MOOSECOVE,midtide,0,1,0,1,1,1,0,1,1,1,1,0,1,1,1,0,0,1,0,0
+13,USA,CENTRALMAINE,MOOSECOVE,midtide,0,1,0,0,0,1,0,1,0,0,1,0,1,0,0,0,0,0,0,0
+14,USA,CENTRALMAINE,MOOSECOVE,midtide,0,1,0,0,0,1,0,0,1,0,1,0,1,1,1,0,0,0,0,0
+15,USA,CENTRALMAINE,MOOSECOVE,midtide,0,0,0,0,0,1,0,0,1,1,0,0,1,1,1,0,0,0,0,0
+16,USA,CENTRALMAINE,MOOSECOVE,midtide,1,1,1,0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1
+17,USA,CENTRALMAINE,MOOSECOVE,midtide,0,0,0,0,0,1,0,1,0,0,1,0,0,1,0,0,0,0,0,0
+18,USA,CENTRALMAINE,MOOSECOVE,midtide,0,0,0,0,1,0,0,0,0,0,1,1,1,1,0,1,0,0,0,0
+19,USA,CENTRALMAINE,MOOSECOVE,midtide,0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0
+20,USA,CENTRALMAINE,MOOSECOVE,midtide,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0

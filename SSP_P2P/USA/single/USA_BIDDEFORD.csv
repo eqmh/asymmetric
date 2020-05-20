@@ -1,0 +1,11 @@
+"","Country","Locality","Site","Strata","Littorina littorea","Littorina obtusata","Nucella lapillus","Ascophyllum nodosum","Fucus distichus","Semibalanus balanoides","Vertebrata lanosa","Testudinalia testudinalis","Chondrus crispus","Corallina officinalis","Hildenbrandia","Mytilus edulis","Clathromorphum"
+"1","USA","BIDDEFORD","BIDDEFORD","hightide",1,1,1,1,1,1,1,0,0,0,0,0,0
+"2","USA","BIDDEFORD","BIDDEFORD","hightide",1,1,1,1,1,1,1,1,1,1,1,0,0
+"3","USA","BIDDEFORD","BIDDEFORD","hightide",1,0,1,0,1,1,0,0,0,0,0,0,0
+"4","USA","BIDDEFORD","BIDDEFORD","hightide",1,1,1,0,1,1,0,0,0,0,0,1,0
+"5","USA","BIDDEFORD","BIDDEFORD","hightide",1,1,1,1,1,1,1,0,0,0,0,0,0
+"6","USA","BIDDEFORD","BIDDEFORD","midtide",1,1,1,1,0,1,1,1,1,1,1,0,1
+"7","USA","BIDDEFORD","BIDDEFORD","midtide",1,0,1,1,1,1,1,0,1,0,1,0,1
+"8","USA","BIDDEFORD","BIDDEFORD","midtide",0,0,0,0,1,1,0,0,0,0,1,0,0
+"9","USA","BIDDEFORD","BIDDEFORD","midtide",1,0,0,0,1,1,0,0,0,0,0,0,0
+"10","USA","BIDDEFORD","BIDDEFORD","midtide",0,0,0,0,1,1,0,0,0,0,0,0,0

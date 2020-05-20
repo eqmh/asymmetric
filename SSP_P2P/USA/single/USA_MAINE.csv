@@ -1,0 +1,11 @@
+"","Country","Locality","Site","Strata","Littorina littorea","Littorina obtusata","Dynamena","Semibalanus balanoides","Hildenbrandia","Mytilus edulis","Nucella lapillus","Polysiphonia"
+"1","USA","MAINE","GRINDSTONE","hightide",1,1,1,1,0,0,0,0
+"2","USA","MAINE","GRINDSTONE","hightide",1,1,1,1,0,0,0,0
+"3","USA","MAINE","GRINDSTONE","hightide",1,1,1,1,1,1,0,0
+"4","USA","MAINE","GRINDSTONE","hightide",1,1,1,0,0,0,0,0
+"5","USA","MAINE","GRINDSTONE","hightide",1,1,1,1,0,0,0,0
+"6","USA","MAINE","GRINDSTONE","midtide",1,1,1,1,0,0,1,0
+"7","USA","MAINE","GRINDSTONE","midtide",1,1,1,1,1,0,1,1
+"8","USA","MAINE","GRINDSTONE","midtide",1,1,1,1,1,0,1,1
+"9","USA","MAINE","GRINDSTONE","midtide",0,1,1,1,1,0,1,1
+"10","USA","MAINE","GRINDSTONE","midtide",1,1,1,1,1,0,1,1

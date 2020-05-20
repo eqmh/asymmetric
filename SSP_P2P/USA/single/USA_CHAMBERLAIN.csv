@@ -1,0 +1,21 @@
+"","Country","Locality","Site","Strata","Lacuna vincta","Littorina littorea","Littorina obtusata","Carcinus maenas","Nucella lapillus","Idotea balthica","Ascophyllum nodosum","Chondrus crispus","Clathromorphum","Mytilus edulis","Semibalanus balanoides","Vertebrata lanosa","Fucus distichus","Mastocarpus stellatus","Polysiphonia","Hildenbrandia","Ulva lactuca"
+"1","USA","CHAMBERLAIN","CHAMBERLAIN","hightide",1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+"2","USA","CHAMBERLAIN","CHAMBERLAIN","hightide",0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+"3","USA","CHAMBERLAIN","CHAMBERLAIN","hightide",1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+"4","USA","CHAMBERLAIN","CHAMBERLAIN","hightide",0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+"5","USA","CHAMBERLAIN","CHAMBERLAIN","hightide",0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+"6","USA","CHAMBERLAIN","CHAMBERLAIN","midtide",0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+"7","USA","CHAMBERLAIN","CHAMBERLAIN","midtide",0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+"8","USA","CHAMBERLAIN","CHAMBERLAIN","midtide",1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0
+"9","USA","CHAMBERLAIN","CHAMBERLAIN","midtide",1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0
+"10","USA","CHAMBERLAIN","CHAMBERLAIN","midtide",0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+"11","USA","MAINE","CHAMBERLAIN","hightide",0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0
+"12","USA","MAINE","CHAMBERLAIN","hightide",0,0,0,0,0,0,1,0,0,1,1,1,1,1,0,0,0
+"13","USA","MAINE","CHAMBERLAIN","hightide",0,0,0,0,0,0,0,0,0,1,0,1,1,1,0,0,0
+"14","USA","MAINE","CHAMBERLAIN","hightide",0,0,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0
+"15","USA","MAINE","CHAMBERLAIN","hightide",0,0,0,0,0,0,1,1,0,1,1,0,1,0,0,1,0
+"16","USA","MAINE","CHAMBERLAIN","midtide",0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,1
+"17","USA","MAINE","CHAMBERLAIN","midtide",0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0
+"18","USA","MAINE","CHAMBERLAIN","midtide",0,0,0,0,0,0,1,0,0,1,1,1,1,1,0,0,0
+"19","USA","MAINE","CHAMBERLAIN","midtide",0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0
+"20","USA","MAINE","CHAMBERLAIN","midtide",0,0,0,0,0,0,1,0,0,1,1,1,1,1,0,0,0
