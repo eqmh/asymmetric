@@ -13,16 +13,16 @@ library(ggplot2)
 
 ############ Localities with more than one site, all tide levels##########
 #Set as working directory the folder "multiple"
-setwd("~/asymmetric/SSP_P2P/multiple")
+setwd("~/asymmetric/SSP_P2P/multiple_2")
 
 files <- list.files()
 
-N = 50 # 100 
-cases = 10 # 100 
+N = 100 # 100 
+cases = 100 # 100 
 sites = 10 # 30. Since the analysis is based on number of squares, simulating sites is not necessary, I would reduce it to 10
 n = 30 # 30 
-m = 3 # 20. reduce to 10 
-k = 3 # 100. I think 100 is a lot, 10 is more than enough.
+m = 10 # 20. reduce to 10 
+k = 10 # 100. I think 100 is a lot, 10 is more than enough.
 
 for ( i in 1:length(files)){
   
@@ -78,7 +78,6 @@ for ( i in 1:length(files)){
   m.sum$Strata<-rep("midtide", nrow(m.sum))
   
   ##SSP for lowtide
-  
   #parameters for simulation
   
   l.par<-assempar(data = dat.l, type = "cover", Sest.method = "chao")
@@ -373,11 +372,11 @@ multse.all$Strata <- factor(multse.all$Strata, levels = c("hightide","midtide", 
                             labels = c("High tide", "Mid tide", "Low tide"))
 
 multse.all$locality <- factor(multse.all$locality,
-                              levels = c("ANTARTICA", "PUNTAARENAS","PUERTOMADRYN", "CONCEPCIÃ"N", "VINADELMAR", "ARRAIALDOCABO", "APACOSTADASALGAS",
+                              levels = c("ANTARTICA", "PUNTAARENAS","PUERTOMADRYN", "CONCEPCI?"N", "VINADELMAR", "ARRAIALDOCABO", "APACOSTADASALGAS",
 "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN",
 "MAINE", "CENTRALMAINE"),
                               labels = c("Antartica (Chile)", "Punta Arenas (Chile)", "Puerto Madryn (Argentina)", 
-                                         "Concepción (Chile)", "Montemar (Chile)", "Arraial do Cabo (Brazil)",
+                                         "Concepci?n (Chile)", "Montemar (Chile)", "Arraial do Cabo (Brazil)",
                                          "Costa das Algas (Brazil)", "Santa Cruz (Galapagos I.)", "Fernando de Noronha (Brazil)",
                                          "Isla Gorgona (Colombia)", "Massachusetts (USA)", "Biddeford (USA)", "Giantstairs (USA)",
                                          "Chamberlain (USA)", "Grindstone (USA)", "N. Maine (USA)")) 
