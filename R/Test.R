@@ -323,7 +323,7 @@ covstop_data <- samps.summary[, c("locality", "strata", "mean.samples", "se.samp
 
 ### use this for filtering by single value (need to run multSE_SSP.R first to generate 'multse.samples')
 multse_data <- multse.samples[, c("samples", "mean", "upper", "lower", "Strata", "locality")] %>% 
-  filter(mean <= 0.125)
+  filter(mean <= 0.1)
  
 multse_min <- aggregate(multse_data$samples, by = list(multse_data$Strata, multse_data$locality), min)
 # multse_mean <- aggregate(multse_data$samples, by = list(multse_data$Strata, multse_data$locality), mean)

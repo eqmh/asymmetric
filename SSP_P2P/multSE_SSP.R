@@ -13,16 +13,16 @@ library(ggplot2)
 
 ############ Localities with more than one site, all tide levels##########
 #Set as working directory the folder "multiple"
-setwd("~/asymmetric/SSP_P2P/multiple_2")
+setwd("~/asymmetric/SSP_P2P/multiple")
 
 files <- list.files()
 
-N = 100 # 100 
+N = 50 # 100 
 cases = 100 # 100 
-sites = 10 # 30. Since the analysis is based on number of squares, simulating sites is not necessary, I would reduce it to 10
+sites = 3 # single sites use 1; multiple sites use 3. Original value: 30. Since the analysis is based on number of squares, simulating sites is not necessary, I would reduce it to 10
 n = 30 # 30 
-m = 10 # 20. reduce to 10 
-k = 10 # 100. I think 100 is a lot, 10 is more than enough.
+m = 3 # single sites use 1; multiple sites use 3. Original value: 20. reduce to 10 
+k = 10 # Use 3 for short runs. Original value:  100. I think 100 is a lot, 10 is more than enough.
 
 for ( i in 1:length(files)){
   
@@ -112,11 +112,11 @@ setwd("~/asymmetric/SSP_P2P/single")
 files <- list.files()
 
 N = 50 # 100 
-cases = 10 # 100 
-sites = 1 # 1 
+cases = 100 # 100 
+sites = 1 # single sites use 1; multiple sites use 3. Original value: 30. Since the analysis is based on number of squares, simulating sites is not necessary, I would reduce it to 10
 n = 30 # 30 
-m = 1 # 1 
-k = 3 # 100
+m = 1 # single sites use 1; multiple sites use 3. Original value: 20. reduce to 10 
+k = 10 # Use 3 for short runs. Original value:  100. I think 100 is a lot, 10 is more than enough.
 
 for ( i in 1:length(files)){
   
@@ -210,11 +210,11 @@ setwd("~/asymmetric/SSP_P2P/USA/multiple")
 files <- list.files()
 
 N = 50 # 100 
-cases = 10 # 100 
-sites = 10 # 30 
+cases = 100 # 100 
+sites = 3 # single sites use 1; multiple sites use 3. Original value: 30. Since the analysis is based on number of squares, simulating sites is not necessary, I would reduce it to 10
 n = 30 # 30 
-m = 3 # 20 
-k = 3 # 100 
+m = 3 # single sites use 1; multiple sites use 3. Original value: 20. reduce to 10 
+k = 10 # Use 3 for short runs. Original value:  100. I think 100 is a lot, 10 is more than enough. 
 
 for ( i in 1:length(files)){
   
@@ -283,11 +283,11 @@ setwd("~/asymmetric/SSP_P2P/USA/single")
 files <- list.files()
 
 N = 50 # 100 
-cases = 10 # 100 
-sites = 1 # 1 
+cases = 100 # 100 
+sites = 1 # single sites use 1; multiple sites use 3. Original value: 30. Since the analysis is based on number of squares, simulating sites is not necessary, I would reduce it to 10
 n = 30 # 30 
-m = 1 # 1 
-k = 3 # 100
+m = 1 # single sites use 1; multiple sites use 3. Original value: 20. reduce to 10 
+k = 10 # Use 3 for short runs. Original value:  100. I think 100 is a lot, 10 is more than enough.
 
 for ( i in 1:length(files)){
   
@@ -372,11 +372,11 @@ multse.all$Strata <- factor(multse.all$Strata, levels = c("hightide","midtide", 
                             labels = c("High tide", "Mid tide", "Low tide"))
 
 multse.all$locality <- factor(multse.all$locality,
-                              levels = c("ANTARTICA", "PUNTAARENAS","PUERTOMADRYN", "CONCEPCI?"N", "VINADELMAR", "ARRAIALDOCABO", "APACOSTADASALGAS",
+                              levels = c("ANTARTICA", "PUNTAARENAS","PUERTOMADRYN", "CONCEPCIÃ“N", "VINADELMAR", "ARRAIALDOCABO", "APACOSTADASALGAS",
 "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN",
 "MAINE", "CENTRALMAINE"),
                               labels = c("Antartica (Chile)", "Punta Arenas (Chile)", "Puerto Madryn (Argentina)", 
-                                         "Concepci?n (Chile)", "Montemar (Chile)", "Arraial do Cabo (Brazil)",
+                                         "Concepcion (Chile)", "Montemar (Chile)", "Arraial do Cabo (Brazil)",
                                          "Costa das Algas (Brazil)", "Santa Cruz (Galapagos I.)", "Fernando de Noronha (Brazil)",
                                          "Isla Gorgona (Colombia)", "Massachusetts (USA)", "Biddeford (USA)", "Giantstairs (USA)",
                                          "Chamberlain (USA)", "Grindstone (USA)", "N. Maine (USA)")) 
@@ -407,7 +407,7 @@ plot.1<-ggplot(multse.samples, aes(x=samples, y=mean, colour = locality, group =
 plot.1  + geom_abline(slope = 0, intercept = 0.1, colour = "blue")
 
 
-#Summar of effort for MultSE of 0.1 in Jaccard space
+#Summary of effort for MultSE of 0.1 in Jaccard space
 multse.samples$mean2 <- round(multse.samples$mean, 2)
 effort <- multse.samples %>% 
             filter(mean2 <= 0.10 & Strata == "Mid tide") %>%
