@@ -329,10 +329,29 @@ multse_min <- aggregate(multse_data$samples, by = list(multse_data$Strata, mults
 # multse_mean <- aggregate(multse_data$samples, by = list(multse_data$Strata, multse_data$locality), mean)
 # multse_sd <- aggregate(multse_data$samples, by = list(multse_data$Strata, multse_data$locality), sd)
 
+### plot regressions between covstop and multse
 
+csv_table <- 'multse_v_covstop_csv_table.csv'
+arrays <-read.csv(csv_table, row.names = 1)
 
+multse_var <- arrays[, 3]
+covstop_var <- arrays[, 6]
+
+ggplot(arrays, aes(x = multse_var, y = covstop_var)) + 
+  geom_point(size = 3) +
+  stat_smooth(method = "lm", col = "red") +
+  geom_abline(slope=1, intercept = 0, linetype="dashed") +
+  xlim(0, 25) +
+  ylim(0, 25) +
+  scale_x_continuous(breaks = seq(0, 25, by = 2)) +
+  scale_y_continuous(breaks = seq(0, 25, by = 4)) +
+  theme(axis.title.x = element_text(size=20)) +
+  theme(axis.title.y = element_text(size=20)) +
+  theme(text = element_text(size = 20)) +
+  xlab("MultSE minimum sample") +
+  ylab("Covstop minimum sample")
   
-  
+
 
 
 
