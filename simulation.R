@@ -47,9 +47,9 @@ p2p <- do.call(rbind, lapply(files, function(l) {
 # Remove duplicate rows
 p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
 
-low.tide <- filter(p2p, country == "COLOMBIA", strata == "LOWTIDE")
-mid.tide <- filter(p2p, country == "COLOMBIA", strata == "MIDTIDE")
-high.tide <- filter(p2p, country == "COLOMBIA", strata == "HIGHTIDE")
+low.tide <- filter(p2p, country == "ARGENTINA", strata == "LOWTIDE")
+mid.tide <- filter(p2p, country == "ARGENTINA", strata == "MIDTIDE")
+high.tide <- filter(p2p, country == "ARGENTINA", strata == "HIGHTIDE")
 
 # extracts quadrat number from 'quadrat' strings and turns it into numeric value
 # low tide
@@ -131,13 +131,40 @@ p <- ggplot() +
   geom_pointrange(summ.vals, mapping = aes(1:q_rep, mean.mid, ymin = l.mid, ymax = u.mid), color = "red") +
   geom_pointrange(summ.vals, mapping = aes(1:q_rep, mean.high, ymin = l.high, ymax = u.high), color = "green") +
   labs(x = "Number of quadrats", y = "Species richness", title = "Gorgona Island") +
-  scale_color_manual(labels = c("low", "mid", "high"), values = c("blue", "red", "green")) +
   theme_bw() + 
   theme(legend.position= "right") 
 p
 
-mdf.avg <- melt(summ.vals[, 1:4], id.vars = c("samples"))
-q <- ggplot() +geom_point(data = mdf.avg, mapping = aes(x = samples, y = value, colour = variable))
 
+# Pivoting the summ.vals table for plotting the data
+l.lower <- as.data.frame(summ.vals[, 5])
+colnames(l.lower) <- "lower"
+l.upper <- as.data.frame(summ.vals[, 6])
+colnames(l.upper) <- "upper"
+m.lower <- as.data.frame(summ.vals[, 7])
+colnames(m.lower) <- "lower"
+m.upper <- as.data.frame(summ.vals[, 8])
+colnames(m.upper) <- "upper"
+h.lower <- as.data.frame(summ.vals[, 9])
+colnames(h.lower) <- "lower"
+h.upper <- as.data.frame(summ.vals[, 10])
+colnames(h.upper) <- "upper"
+
+lower <- bind_rows(l.lower, m.lower, h.lower)
+upper <- bind_rows(l.upper, m.upper, h.upper)
+
+mdf.avg <- melt(summ.vals[, 1:4], id.vars = c("samples"))
+mdf.avg <- bind_cols(mdf.avg, upper, lower)
+colnames(mdf.avg) <- c("samples", "stratum", "mean", "upper", "lower")
+
+q <- ggplot(data = mdf.avg, mapping = aes(x = samples, y = mean, colour = stratum)) + 
+  geom_point() +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width=.2) +
+  ylim(0, 52) +
+  theme_bw() +
+  labs(x = "Number of quadrats", y = "Species richness", title = "Puerto Madryn, Argentina") +
+  theme(axis.text=element_text(size=14),
+        axis.title=element_text(size=14))
+q
 
 
