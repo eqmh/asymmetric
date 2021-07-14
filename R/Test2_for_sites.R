@@ -7,10 +7,11 @@
 # Load required libraries
 library(iNEXT)
 library(tidyverse)
+library(here)
 
 # setwd(path = "C:/Users/jslef/OneDrive - Smithsonian Institution/Documents/GitHub/asymmetric/")
 # enrique change this for your local siles
-setwd("~/asymmetric")
+# setwd("~/asymmetric")
 
 # Load function to compute coverage-based stopping
 source("R/covstop.R")
@@ -26,9 +27,6 @@ source("R/covstop.R")
 # Read in data
 
 files <- list.files("./data")
-
-# # remove weird locality
-# files <- files[-2]
 
 p2p <- do.call(rbind, lapply(files, function(l) {
   
@@ -54,6 +52,16 @@ p2p <- do.call(rbind, lapply(files, function(l) {
 
 # Remove duplicate rows
 p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
+
+# Complete missing replicates
+with(p2p, table(site, strata, quadrat))
+
+p2p <- p2p %>% complete(quadrat, nesting(locality, site, strata), fill = list(taxa = 0))
+
+# Find sites where all quadrats only have a taxa code of 0
+remove <- p2p %>% group_by(locality, site, strata) %>% summarize(remove = ifelse(all(taxa == "0"), TRUE, FALSE))
+
+subset(remove, remove == TRUE)$site # no sites missing all qaudrats
 
 # Write csv
 write.csv(p2p, "./sites.csv")
@@ -82,17 +90,20 @@ rare <- do.call(rbind, lapply(unique(p2p$site), function(j) {
       
       if(nrow(x) == 0) data.frame() else {
         
-        # summarize by locality or site
-        x$presence <- 1
+        x$presence <- ifelse(x$taxa == 0, 0, 1)
         
-        # x <- x %>% group_by(locality, site, strata, taxa) %>% summarize(presence = sum(presence))
+        # x <- x %>% group_by(locality, site, strata, quadrat, taxa) %>% summarize(presence = sum(presence))
           
         # Cast longways
         mat <- x %>% select(site, quadrat, taxa, presence) %>% 
           
-          pivot_wider(id_cols = c(site, quadrat), names_from = taxa, values_from = presence) 
+          pivot_wider(id_cols = c(site, quadrat), names_from = taxa, values_from = presence, 
+                      values_fn = mean) 
         
         mat[is.na(mat)] <- 0
+        
+        # remove taxa placeholder
+        mat <- mat[, colnames(mat) != "0"]
         
         dnames <- list(colnames(mat)[-(1:2)], as.character(mat$site))
         
@@ -125,7 +136,7 @@ rare <- do.call(rbind, lapply(unique(p2p$site), function(j) {
         ret[idx + 2, "method"] <- "extrapolated"
       
         data.frame(
-          # locality = i,
+          locality = unique(x$locality),
           site = j,
           strata = k,
           ret[, c(1:2, 4)]
@@ -141,30 +152,35 @@ rare <- do.call(rbind, lapply(unique(p2p$site), function(j) {
 
 rare$strata <- factor(rare$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
-# Plot results
-(rareplot <- ggplot() +
-  geom_line(data = subset(rare, method == "interpolated"), aes(x = t, y = qD, group = paste(site, strata), col = strata)) +
-  geom_line(data = subset(rare, method == "extrapolated"), aes(x = t, y = qD, group = paste(site, strata), col = strata), lty = 3) +
-  geom_point(data = subset(rare, method == "observed"), aes(x = t, y = qD, group = paste(site, strata), col = strata), size = 2) +
-  scale_color_manual(values = c("black", "dodgerblue3", "forestgreen")) +
-  labs(x = "Number of samples", y = "Species richness") +
-  facet_grid( ~ strata, scales = "free_x") +
-  theme_bw(base_size = 12) +
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    legend.position = "none"
-  )
-)
-
+# # Plot results
+# (rareplot <- ggplot() +
+#   geom_line(data = subset(rare, method == "interpolated"), aes(x = t, y = qD, group = paste(site, strata), col = strata)) +
+#   geom_line(data = subset(rare, method == "extrapolated"), aes(x = t, y = qD, group = paste(site, strata), col = strata), lty = 3) +
+#   geom_point(data = subset(rare, method == "observed"), aes(x = t, y = qD, group = paste(site, strata), col = strata), size = 2) +
+#   scale_color_manual(values = c("black", "dodgerblue3", "forestgreen")) +
+#   labs(x = "Number of samples", y = "Species richness") +
+#   facet_grid( ~ strata, scales = "free_x") +
+#   theme_bw(base_size = 12) +
+#   theme(
+#     panel.grid.major = element_blank(),
+#     panel.grid.minor = element_blank(),
+#     legend.position = "none"
+#   )
+# )
 
 # ggsave("./output/Rarefaction plot.pdf", rareplot, device = "pdf", width = 10, height = 5, units = "in")
 
+rare_summ <- rare %>% group_by(method, locality, strata, t) %>% 
+  
+  mutate(locality = as.factor(as.character(locality))) %>% summarize(qD = mean(qD)) 
+
+levels(rare_summ$locality) <- c() # here is where you can change the locality names
+
 # Plot results with curves colored according to locality  
 (rareplot_1 <- ggplot() +
-  geom_line(data = subset(rare, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality)) + 
-  geom_line(data = subset(rare, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3) + 
-  geom_point(data = subset(rare, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), size = 2) + 
+  geom_line(data = subset(rare_summ, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality)) + 
+  geom_line(data = subset(rare_summ, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3) + 
+  geom_point(data = subset(rare_summ, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), size = 2) + 
   ylim(0, 65) + 
   labs(x = "Number of samples", y = "Species richness") + 
   facet_grid( ~ strata, scales = "free_x") + 
@@ -180,42 +196,42 @@ rare$strata <- factor(rare$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"))
 
 ### This plots individual sites
 
-sel_locality = "NORTHERNMA"
-
-(rareplot_1 <- ggplot() +
-    geom_line(data = subset(rare, method == "interpolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata))) + 
-    geom_line(data = subset(rare, method == "extrapolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata)), lty = 3) + 
-    geom_point(data = subset(rare, method == "observed" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata)), size = 2) + 
-    ylim(0, 65) + 
-    xlim(0, 80) + 
-    labs(x = "Number of samples", y = "Species richness") + 
-    facet_grid( ~ strata, scales = "free_x") + 
-    theme_bw(base_size = 14) +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      # legend.position = "none"
-    )
-)
-
-### Delete rows from specific localities in 'rare' data frame
-rare2 <- rare[!grepl("MASSACHUSETTS", rare$locality),] ### this allowes to generate 'rare_plot_2'
-
-# Plot results with curves colored according to locality  
-(rareplot_1 <- ggplot() +
-    geom_line(data = subset(rare2, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality)) + 
-    geom_line(data = subset(rare2, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3) + 
-    geom_point(data = subset(rare2, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), size = 2) + 
-    ylim(0, 65) + 
-    labs(x = "Number of samples", y = "Species richness") + 
-    facet_grid( ~ strata, scales = "free_x") + 
-    theme_bw(base_size = 14) +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      # legend.position = "none"
-    )
-)
+# sel_locality = "NORTHERNMA"
+# 
+# (rareplot_1 <- ggplot() +
+#     geom_line(data = subset(rare, method == "interpolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata))) + 
+#     geom_line(data = subset(rare, method == "extrapolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata)), lty = 3) + 
+#     geom_point(data = subset(rare, method == "observed" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata)), size = 2) + 
+#     ylim(0, 65) + 
+#     xlim(0, 80) + 
+#     labs(x = "Number of samples", y = "Species richness") + 
+#     facet_grid( ~ strata, scales = "free_x") + 
+#     theme_bw(base_size = 14) +
+#     theme(
+#       panel.grid.major = element_blank(),
+#       panel.grid.minor = element_blank(),
+#       # legend.position = "none"
+#     )
+# )
+# 
+# ### Delete rows from specific localities in 'rare' data frame
+# rare2 <- rare[!grepl("MASSACHUSETTS", rare$locality),] ### this allowes to generate 'rare_plot_2'
+# 
+# # Plot results with curves colored according to locality  
+# (rareplot_1 <- ggplot() +
+#     geom_line(data = subset(rare2, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality)) + 
+#     geom_line(data = subset(rare2, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3) + 
+#     geom_point(data = subset(rare2, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), size = 2) + 
+#     ylim(0, 65) + 
+#     labs(x = "Number of samples", y = "Species richness") + 
+#     facet_grid( ~ strata, scales = "free_x") + 
+#     theme_bw(base_size = 14) +
+#     theme(
+#       panel.grid.major = element_blank(),
+#       panel.grid.minor = element_blank(),
+#       # legend.position = "none"
+#     )
+# )
 
 ### Calculate % coverage based on observed number of species and maximum extrapolated values
 
@@ -249,14 +265,20 @@ samps <- do.call(rbind, lapply(unique(p2p$locality), function(i) {
       
       if(nrow(x) == 0) data.frame() else {
     
-        x$presence <- 1
-      
-        # Cast longways
-        mat <- x %>% select(quadrat, taxa, presence) %>% 
+        x$presence <- ifelse(x$taxa == 0, 0, 1)
         
-          pivot_wider(id_cols = quadrat, names_from = taxa, values_from = presence) 
+        # x <- x %>% group_by(locality, site, strata, quadrat, taxa) %>% summarize(presence = sum(presence))
+        
+        # Cast longways
+        mat <- x %>% select(site, quadrat, taxa, presence) %>% 
+          
+          pivot_wider(id_cols = c(site, quadrat), names_from = taxa, values_from = presence, 
+                      values_fn = mean) 
         
         mat[is.na(mat)] <- 0
+        
+        # remove taxa placeholder
+        mat <- mat[, colnames(mat) != "0"]
     
         data.frame(
           x[1, 1:6],
@@ -286,15 +308,16 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
   summarize(mean.samples = mean(minsamples), se.samples = plotrix::std.error(minsamples), totsamples = mean(totsamples))
 
 (stopplot <- ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill = strata)) +
+  geom_hline(yintercept = 10, col = "grey50") +
   geom_errorbar(aes(ymax = mean.samples + se.samples, ymin = mean.samples - se.samples), width = 0.3) +
   geom_bar(stat = "identity") +
-  geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 5) +
+  # geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 5) +
   facet_grid(~ strata, scale = "free_y") +
   scale_fill_manual(values = c("black", "dodgerblue3", "forestgreen")) +
   labs(x = "", y = "Minimum number of samples") +
   theme_bw(base_size = 14) +
   theme(
-    axis.text.x = element_text(angle = 90, hjust = 1),
+    axis.text.x = element_text(angle = 45, hjust = 1),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     legend.position = "none"
