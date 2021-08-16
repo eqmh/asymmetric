@@ -47,9 +47,9 @@ p2p <- do.call(rbind, lapply(files, function(l) {
 # Remove duplicate rows
 p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
 
-low.tide <- filter(p2p, country == "ARGENTINA", strata == "LOWTIDE")
-mid.tide <- filter(p2p, country == "ARGENTINA", strata == "MIDTIDE")
-high.tide <- filter(p2p, country == "ARGENTINA", strata == "HIGHTIDE")
+low.tide <- filter(p2p, country == "ARGENTINA", locality == "PUERTOMADRYN", strata == "LOWTIDE")
+mid.tide <- filter(p2p, country == "ARGENTINA", locality == "PUERTOMADRYN", strata == "MIDTIDE")
+high.tide <- filter(p2p, country == "ARGENTINA", locality == "PUERTOMADRYN", strata == "HIGHTIDE")
 
 # extracts quadrat number from 'quadrat' strings and turns it into numeric value
 # low tide
@@ -133,6 +133,8 @@ p <- ggplot() +
   labs(x = "Number of quadrats", y = "Species richness", title = "Gorgona Island") +
   theme_bw() + 
   theme(legend.position= "right") 
+  theme(axis.text=element_text(size=14),
+      axis.title=element_text(size=14))
 p
 
 
@@ -162,7 +164,7 @@ q <- ggplot(data = mdf.avg, mapping = aes(x = samples, y = mean, colour = stratu
   geom_errorbar(aes(ymin = lower, ymax = upper), width=.2) +
   ylim(0, 52) +
   theme_bw() +
-  labs(x = "Number of quadrats", y = "Species richness", title = "Puerto Madryn, Argentina") +
+  labs(x = "Number of quadrats", y = "Species richness", title = "Isla Gorgona, Colombia") +
   theme(axis.text=element_text(size=14),
         axis.title=element_text(size=14))
 q
