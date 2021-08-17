@@ -196,7 +196,7 @@ levels(rare_summ$locality) <- c() # here is where you can change the locality na
 
 ### This plots individual sites
 
-sel_locality = "NORTHERNMA"
+sel_locality = "GRINDSTONE"
 
 (rareplot_2 <- ggplot() +
     geom_line(data = subset(rare_summ, method == "interpolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata))) +
@@ -218,7 +218,7 @@ sel_locality = "NORTHERNMA"
 # rare2 <- rare[!grepl("MASSACHUSETTS", rare$locality),] ### this allows to generate 'rare_plot_2'
 # 
 # # Plot results with curves colored according to locality  
-# (rareplot_1 <- ggplot() +
+# (rareplot_2 <- ggplot() +
 #     geom_line(data = subset(rare2, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality)) + 
 #     geom_line(data = subset(rare2, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3) + 
 #     geom_point(data = subset(rare2, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), size = 2) + 
@@ -235,11 +235,11 @@ sel_locality = "NORTHERNMA"
 
 ### Calculate % coverage based on observed number of species and maximum extrapolated values
 
-sel_site = "ANTARTICA"
-tide_stratum = "MIDTIDE"
-inter_data <- subset(rare2, method == "interpolated" & strata == tide_stratum & locality == sel_site)
-extra_data <- subset(rare2, method == "extrapolated" & strata == tide_stratum & locality == sel_site)
-obs_data <- subset(rare2, method == "observed" & strata == tide_stratum & locality == sel_site)
+sel_site = "ISLAGORGONA"
+tide_stratum = "LOWTIDE"
+inter_data <- subset(rare_summ, method == "interpolated" & strata == tide_stratum & locality == sel_site)
+extra_data <- subset(rare_summ, method == "extrapolated" & strata == tide_stratum & locality == sel_site)
+obs_data <- subset(rare_summ, method == "observed" & strata == tide_stratum & locality == sel_site)
 
 spp_cover <- obs_data$qD/max(extra_data$qD)
 
@@ -328,7 +328,7 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
 #ggsave("./output/Stopping plot.pdf", stopplot, device = "pdf", width = 11, height = 6, units = "in")
 
 ### This extracts maximum values of extrapolated richness from each locality
-max_extra <- filter(rare2, method == "extrapolated" & locality == "ISLAGORGONA")
+max_extra <- filter(rare_summ, method == "extrapolated" & locality == "ISLAGORGONA")
 max(max_extra$qD)
 
 ### This calculates the difference between minimum number of samples needed for 100% coverage and actual number of samples collected
@@ -343,7 +343,7 @@ frac_samps <- diff_samps/min_coverage
 
 covstop_data <- samps.summary[, c("locality", "strata", "mean.samples", "se.samples")]
 
-### use this for filtering by range value (need to run multSE_SSP.R first to generate 'multse.samples')
+### use this for filtering by range value (need to run multSE_SSP.R first [lines 357-387] to generate 'multse.samples')
 # multse_data <- multse.samples[, c("samples", "mean", "upper", "lower", "Strata", "locality")] %>% 
 #   filter(mean < 0.11) %>% filter(mean > 0.09) 
 
@@ -357,11 +357,11 @@ multse_min <- aggregate(multse_data$samples, by = list(multse_data$Strata, mults
 
 ### plot regressions between covstop and multse
 
-csv_table <- 'multse_v_covstop_csv_table.csv'
+csv_table <- 'multse_v_covstop_csv_table_v2.csv'
 arrays <-read.csv(csv_table, row.names = 1)
 
-multse_var <- arrays[, 3]
-covstop_var <- arrays[, 6]
+multse_var <- arrays[, 1]
+covstop_var <- arrays[, 4]
 
 ggplot(arrays, aes(x = multse_var, y = covstop_var)) + 
   geom_point(size = 3) +

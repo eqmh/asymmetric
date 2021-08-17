@@ -1,0 +1,5 @@
+README:
+
+The file 'BRAZIL-FERNANDODENORONHA-ALL_ipt_occurrence' was replaced by 'BRAZIL-FERNANDODENORONHA-ALL_ipt_occurrence_wo_single_spp' because Test2_for_sites.R crahes with the original table. This was fixed by removing rows for HIGHTIDE in AIRFRANCE and BOLDRO, which had a single ssp.
+The file 'USA-NORTHERNMA_ipt_occurrence' was replaced by 'USA-NORTHERNMA_ipt_occurrence_renamed_occID_pumphouse' to rename the occurrenceID for Pumphouse so that they now read as 'USA_NORTHERNMA_PUMPHOUSE_20180716_' in rows 2-38. By doing this all Pumphouse records under MASSACHUSETTS and NORTHERNMA are merged under NORTHERNMA. Note that rows 108-129 in the original table were moved upward to be group with the Pumphouse lines.
+The file 'USA-GRINDSTONE_ipt_occurrence' was replaced by 'USA-GRINDSTONE_ipt_occurrence_MAINE_removed' to change the occurrenceID to GRINDSTONE_GRINDSTONE.

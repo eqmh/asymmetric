@@ -1,0 +1,17 @@
+LOCALITY,MIN (multse) - H,MIN (multse) - M,MIN (multse) - L,MEAN (covstop) - H,MEAN (covstop) - M,MEAN (covstop) - L
+Antartica,5,2,6,2,2.5,4
+Punta Arenas,10,11,12,8,5,10
+Puerto Madryn,5,3,8,3,2.3,5.7
+Concepción,7,10,12,4,9.3,11
+"Reñaca, Viña del Mar",6,16,17,6,20,18
+Arraial do Cabo,4,3,7,1.7,3,2
+APA Costa das Algas,5,7,7,4,6,8
+SANTA CRUZ,7,6,11,11.5,12.3,10.3
+Fernando de Noronha,2,6,8,2,5,4.75
+Isla Gorgona,9,14,15,15,20.7,16.3
+Massachusetts,7,8,nan,4.5,4,nan
+Biddeford,5,8,nan,11,9,nan
+Giantstairs,8,3,nan,15,6,nan
+Chamberlain,17,14,nan,5,7,nan
+Grindstone (Maine),2,2,nan,5,5,nan
+N. Maine (Centralmaine),6,11,nan,7,13.5,nan
