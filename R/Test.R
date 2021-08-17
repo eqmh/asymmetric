@@ -286,7 +286,8 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
 (stopplot <- ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill = strata)) +
   geom_errorbar(aes(ymax = mean.samples + se.samples, ymin = mean.samples - se.samples), width = 0.3) +
   geom_bar(stat = "identity") +
-  geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 5) +
+  # geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 5) + # use to add red diamonds
+  geom_hline(aes(yintercept = 10), linetype = "dashed") +
   facet_grid(~ strata, scale = "free_y") +
   scale_fill_manual(values = c("black", "dodgerblue3", "forestgreen")) +
   labs(x = "", y = "Minimum number of samples") +
