@@ -200,7 +200,7 @@ sel_locality = "NORTHERNMA"
 rare2 <- rare[!grepl("MASSACHUSETTS", rare$locality),] ### this allowes to generate 'rare_plot_2'
 
 # Plot results with curves colored according to locality  
-(rareplot_1 <- ggplot() +
+(rareplot_2 <- ggplot() +
     geom_line(data = subset(rare2, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality)) + 
     geom_line(data = subset(rare2, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3) + 
     geom_point(data = subset(rare2, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), size = 2) + 
