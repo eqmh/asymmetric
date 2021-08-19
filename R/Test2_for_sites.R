@@ -420,6 +420,7 @@ ggplot(ssp_lat, aes(x = latitude, y = value)) +
   xlab("Latitude") +
   ylab("Species richness")
 
+### This is the plot used in the manuscript
 ssp_lat <-read.csv('lat_vs_spp_p2p_v3.csv')
 ssp_lat2 <- ssp_lat[-c(8, 9), ] # this removes F. de Noronha and Sta Cruz
 
