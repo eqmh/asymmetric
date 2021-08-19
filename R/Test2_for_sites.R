@@ -174,36 +174,47 @@ rare_summ <- rare %>% group_by(method, locality, strata, t) %>%
   
   mutate(locality = as.factor(as.character(locality))) %>% summarize(qD = mean(qD)) 
 
-levels(rare_summ$locality) <- c() # here is where you can change the locality names
+rare_summ$locality <- factor(rare_summ$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN",  "CONCEPCIÃ“N", "REÃ‘ACA,VIÃ‘ADELMAR",
+                                                    "ARRAIALDOCABO", "APACOSTADASALGAS", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", 
+                                                    "NORTHERNMA", "BIDDEFORD","GIANTSTAIRS", "CHAMBERLAIN", "GRINDSTONE", "CENTRALMAINE"))
+
+
+levels(rare_summ$locality) <- c("Antarctica", "Punta Arenas", "Puerto Madryn", "Concepción", 
+                                "Montemar", "Arraial do Cabo", "Costa das Algas", "Santa Cruz", "Fernando de Noronha", 
+                                "Isla Gorgona", "Massachusetts", "Biddeford", "Giant Stairs", "Chamberlain", 
+                                "Grindstone", "N. Maine") # here is where you can change the locality names
 
 # Plot results with curves colored according to locality  
 (rareplot_1 <- ggplot() +
-  geom_line(data = subset(rare_summ, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality)) + 
-  geom_line(data = subset(rare_summ, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3) + 
+  geom_line(data = subset(rare_summ, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 1, size = 1) + 
+  geom_line(data = subset(rare_summ, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), lty = 3, size = 1) + 
   geom_point(data = subset(rare_summ, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(locality, strata), col = locality), size = 2) + 
+  xlim(0, 25) +
   ylim(0, 40) + 
   labs(x = "Number of samples", y = "Species richness") + 
   facet_grid( ~ strata, scales = "free_x") + 
   theme_bw(base_size = 14) +
-  theme(
+    theme(
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
-      # legend.position = "none"
+      axis.title.x = element_text(size=20),
+      axis.title.y = element_text(size=20),
+      text = element_text(size = 20)
   )
 )
 
 # Plot results with curves colored according to site  
-rare_summ <- rare %>% group_by(method, site, strata, t) %>% 
+rare_summ_2 <- rare %>% group_by(method, site, strata, t) %>% 
   
   mutate(site = as.factor(as.character(site))) %>% summarize(qD = mean(qD)) 
 
-levels(rare_summ$site) <- c() # here is where you can change the site names
+levels(rare_summ_2$site) <- c() # here is where you can change the site names
 
 # Plot results with curves colored according to site  
-(rareplot_1 <- ggplot() +
-    geom_line(data = subset(rare_summ, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(site, strata), col = site)) + 
-    geom_line(data = subset(rare_summ, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(site, strata), col = site), lty = 3) + 
-    geom_point(data = subset(rare_summ, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(site, strata), col = site), size = 2) + 
+(rareplot_1b <- ggplot() +
+    geom_line(data = subset(rare_summ_2, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(site, strata), col = site)) + 
+    geom_line(data = subset(rare_summ_2, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(site, strata), col = site), lty = 3) + 
+    geom_point(data = subset(rare_summ_2, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(site, strata), col = site), size = 2) + 
     ylim(0, 40) + 
     labs(x = "Number of samples", y = "Species richness") + 
     facet_grid( ~ strata, scales = "free_x") + 
