@@ -235,13 +235,25 @@ sel_locality = "GRINDSTONE"
 
 ### Calculate % coverage based on observed number of species and maximum extrapolated values
 
-sel_site = "ISLAGORGONA"
-tide_stratum = "LOWTIDE"
-inter_data <- subset(rare_summ, method == "interpolated" & strata == tide_stratum & locality == sel_site)
-extra_data <- subset(rare_summ, method == "extrapolated" & strata == tide_stratum & locality == sel_site)
-obs_data <- subset(rare_summ, method == "observed" & strata == tide_stratum & locality == sel_site)
+sel_site = "NORTHERNMA"
+inter_data_h <- subset(rare_summ, method == "interpolated" & strata == "HIGHTIDE" & locality == sel_site)
+extra_data_h  <- subset(rare_summ, method == "extrapolated" & strata == "HIGHTIDE" & locality == sel_site)
+obs_data_h  <- subset(rare_summ, method == "observed" & strata == "HIGHTIDE" & locality == sel_site)
+spp_cover_h  <- obs_data_h$qD/max(extra_data_h$qD)
 
-spp_cover <- obs_data$qD/max(extra_data$qD)
+inter_data_m <- subset(rare_summ, method == "interpolated" & strata == "MIDTIDE" & locality == sel_site)
+extra_data_m  <- subset(rare_summ, method == "extrapolated" & strata == "MIDTIDE" & locality == sel_site)
+obs_data_m  <- subset(rare_summ, method == "observed" & strata == "MIDTIDE" & locality == sel_site)
+spp_cover_m  <- obs_data_m$qD/max(extra_data_m$qD)
+
+inter_data_l <- subset(rare_summ, method == "interpolated" & strata == "LOWTIDE" & locality == sel_site)
+extra_data_l  <- subset(rare_summ, method == "extrapolated" & strata == "LOWTIDE" & locality == sel_site)
+obs_data_l  <- subset(rare_summ, method == "observed" & strata == "LOWTIDE" & locality == sel_site)
+spp_cover_l  <- obs_data_l$qD/max(extra_data_l$qD)
+
+spp_cover_h
+spp_cover_m
+spp_cover_l
 
 #####-----------------------------------------------------------------------------------------------
 
@@ -298,7 +310,7 @@ samps$strata <- factor(samps$strata, levels = c("HIGHTIDE", "MIDTIDE", "LOWTIDE"
 
 samps$locality <- factor(samps$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN",  "CONCEPCIÃ“N", "REÃ‘ACA,VIÃ‘ADELMAR",
                                                        "ARRAIALDOCABO", "APACOSTADASALGAS", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", 
-                                                      "NORTHERNMA", "BIDDEFORD","GIANTSTAIRS", "CHAMBERLAIN", "MAINE", "CENTRALMAINE"))
+                                                      "NORTHERNMA", "BIDDEFORD","GIANTSTAIRS", "CHAMBERLAIN", "GRINDSTONE", "CENTRALMAINE"))
 
 # Generate summary figures
 samps.summary <- samps %>% group_by(locality, strata) %>% 
@@ -307,11 +319,19 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
   
   summarize(mean.samples = mean(minsamples), se.samples = plotrix::std.error(minsamples), totsamples = mean(totsamples))
 
+# # this replaces the number of samples collected in specific localities 
+samps.summary$totsamples[which(samps.summary$locality == "NORTHERNMA")] <- 5
+samps.summary$totsamples[which(samps.summary$locality == "BIDDEFORD")] <- 5
+samps.summary$totsamples[which(samps.summary$locality == "GIANTSTAIRS")] <- 5
+samps.summary$totsamples[which(samps.summary$locality == "CHAMBERLAIN")] <- 5
+samps.summary$totsamples[which(samps.summary$locality == "GRINDSTONE")] <- 5
+samps.summary$totsamples[which(samps.summary$locality == "CENTRALMAINE")] <- 5
+
 (stopplot <- ggplot(samps.summary, aes(x = locality, y = mean.samples, group = strata, fill = strata)) +
   geom_hline(yintercept = 10, col = "grey50", linetype = "dashed") +
   geom_errorbar(aes(ymax = mean.samples + se.samples, ymin = mean.samples - se.samples), width = 0.3) +
   geom_bar(stat = "identity") +
-  # geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 5) +
+  geom_point(aes(x = locality, y = totsamples, group = strata), shape = 23, fill = "red", size = 3) +
   facet_grid(~ strata, scale = "free_y") +
   scale_fill_manual(values = c("black", "dodgerblue3", "forestgreen")) +
   lims(y = c(0, 30)) +
@@ -327,9 +347,13 @@ samps.summary <- samps %>% group_by(locality, strata) %>%
 
 #ggsave("./output/Stopping plot.pdf", stopplot, device = "pdf", width = 11, height = 6, units = "in")
 
-### This extracts maximum values of extrapolated richness from each locality
-max_extra <- filter(rare_summ, method == "extrapolated" & locality == "ISLAGORGONA")
+### This extracts maximum values of extrapolated and observed richness from each locality
+sel_locality = "CENTRALMAINE"
+max_extra <- filter(rare_summ, method == "extrapolated" & locality == sel_locality)
+max_obs <- filter(rare_summ, method == "observed" & locality == sel_locality)
+
 max(max_extra$qD)
+max(max_obs$qD)
 
 ### This calculates the difference between minimum number of samples needed for 100% coverage and actual number of samples collected
 
@@ -378,7 +402,27 @@ ggplot(arrays, aes(x = multse_var, y = covstop_var)) +
   ylab("Covstop minimum sample")
   
 
+### plot latitude versus observed and extrapolated ssp richness
 
+ssp_lat <-read.csv('lat_vs_spp_p2p_v2.csv') 
+
+qq <- ggplot(ssp_lat, aes(x = latitude)) + 
+    geom_line(aes(y = obs_max)) +
+    geom_line(aes(y = qD_max)) +
+qq
+  
+  
+  
+  
+  xlim(0, 25) +
+  ylim(0, 25) +
+  scale_x_continuous(breaks = seq(0, 25, by = 2)) +
+  scale_y_continuous(breaks = seq(0, 25, by = 4)) +
+  theme(axis.title.x = element_text(size=20)) +
+  theme(axis.title.y = element_text(size=20)) +
+  theme(text = element_text(size = 20)) +
+  xlab("MultSE minimum sample") +
+  ylab("Covstop minimum sample")
 
 
 
