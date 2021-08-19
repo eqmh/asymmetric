@@ -410,7 +410,7 @@ ssp_lat <-read.csv('lat_vs_spp_p2p_v3.csv') %>%
 
 theme_set(theme_bw())
 ggplot(ssp_lat, aes(x = latitude, y = value)) + 
-  geom_line(aes(color = variable, size = 1)) + 
+  geom_line(aes(color = variable)) + 
   scale_color_manual(values = c("darkred", "steelblue"), labels = c("Extrapolated", "Observed")) +
   xlim(-65, 50) +
   ylim(0, 40) +
@@ -424,9 +424,11 @@ ssp_lat <-read.csv('lat_vs_spp_p2p_v3.csv')
 ssp_lat2 <- ssp_lat[-c(8, 9), ] # this removes F. de Noronha and Sta Cruz
 
 theme_set(theme_bw())
-ggplot(ssp_lat, aes(x = latitude)) + 
-  geom_line(aes(y = obs_max, color = 'blue', size = 1.5)) + 
-  geom_line(aes(y = qD_max, color = 'red', size = 1.5)) + 
+ggplot() + 
+  geom_line(data = ssp_lat, aes(x = latitude, y = obs_max, color = 'Extrapolated'), linetype = 1, size = 1) + 
+  geom_line(data = ssp_lat, aes(x = latitude, y = qD_max, color = 'Observed average'), linetype = 1, size = 1) + 
+  geom_line(data = ssp_lat2, aes(x = latitude, y = obs_max, color = 'Extrapolated'), linetype = 2, size = 1) + 
+  geom_line(data = ssp_lat2, aes(x = latitude, y = qD_max, color = 'Observed average'), linetype = 2, size = 1) + 
   xlim(-65, 50) +
   ylim(0, 40) +
   theme(axis.title.x = element_text(size=20)) +
@@ -434,7 +436,4 @@ ggplot(ssp_lat, aes(x = latitude)) +
   theme(text = element_text(size = 20)) +
   xlab("Latitude") +
   ylab("Species richness")
-
-
-
 
