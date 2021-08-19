@@ -404,29 +404,36 @@ ggplot(arrays, aes(x = multse_var, y = covstop_var)) +
 
 ### plot latitude versus observed and extrapolated ssp richness
 
-ssp_lat <-read.csv('lat_vs_spp_p2p_v2.csv') 
+ssp_lat <-read.csv('lat_vs_spp_p2p_v3.csv') %>% 
+  select(latitude, qD_max, obs_max) %>%
+  gather(key = "variable", value = "value", -latitude)
 
-qq <- ggplot(ssp_lat, aes(x = latitude)) + 
-    geom_line(aes(y = obs_max)) +
-    geom_line(aes(y = qD_max)) +
-qq
-  
-  
-  
-  
-  xlim(0, 25) +
-  ylim(0, 25) +
-  scale_x_continuous(breaks = seq(0, 25, by = 2)) +
-  scale_y_continuous(breaks = seq(0, 25, by = 4)) +
+theme_set(theme_bw())
+ggplot(ssp_lat, aes(x = latitude, y = value)) + 
+  geom_line(aes(color = variable, size = 1)) + 
+  scale_color_manual(values = c("darkred", "steelblue"), labels = c("Extrapolated", "Observed")) +
+  xlim(-65, 50) +
+  ylim(0, 40) +
   theme(axis.title.x = element_text(size=20)) +
   theme(axis.title.y = element_text(size=20)) +
   theme(text = element_text(size = 20)) +
-  xlab("MultSE minimum sample") +
-  ylab("Covstop minimum sample")
+  xlab("Latitude") +
+  ylab("Species richness")
 
+ssp_lat <-read.csv('lat_vs_spp_p2p_v3.csv')
+ssp_lat2 <- ssp_lat[-c(8, 9), ] # this removes F. de Noronha and Sta Cruz
 
-
-
+theme_set(theme_bw())
+ggplot(ssp_lat, aes(x = latitude)) + 
+  geom_line(aes(y = obs_max, color = 'blue', size = 1.5)) + 
+  geom_line(aes(y = qD_max, color = 'red', size = 1.5)) + 
+  xlim(-65, 50) +
+  ylim(0, 40) +
+  theme(axis.title.x = element_text(size=20)) +
+  theme(axis.title.y = element_text(size=20)) +
+  theme(text = element_text(size = 20)) +
+  xlab("Latitude") +
+  ylab("Species richness")
 
 
 
