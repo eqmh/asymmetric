@@ -192,6 +192,29 @@ levels(rare_summ$locality) <- c() # here is where you can change the locality na
   )
 )
 
+# Plot results with curves colored according to site  
+rare_summ <- rare %>% group_by(method, site, strata, t) %>% 
+  
+  mutate(site = as.factor(as.character(site))) %>% summarize(qD = mean(qD)) 
+
+levels(rare_summ$site) <- c() # here is where you can change the site names
+
+# Plot results with curves colored according to site  
+(rareplot_1 <- ggplot() +
+    geom_line(data = subset(rare_summ, method == "interpolated" & strata == strata), aes(x = t, y = qD, group = paste(site, strata), col = site)) + 
+    geom_line(data = subset(rare_summ, method == "extrapolated" & strata == strata), aes(x = t, y = qD, group = paste(site, strata), col = site), lty = 3) + 
+    geom_point(data = subset(rare_summ, method == "observed" & strata == strata), aes(x = t, y = qD, group = paste(site, strata), col = site), size = 2) + 
+    ylim(0, 40) + 
+    labs(x = "Number of samples", y = "Species richness") + 
+    facet_grid( ~ strata, scales = "free_x") + 
+    theme_bw(base_size = 14) +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      # legend.position = "none"
+    )
+)
+
 # ggsave("./output/Rarefaction plot 2.pdf", rareplot_1, device = "pdf", width = 10, height = 5, units = "in")  
 
 ### This plots individual sites
@@ -233,22 +256,22 @@ sel_locality = "GRINDSTONE"
 #     )
 # )
 
-### Calculate % coverage based on observed number of species and maximum extrapolated values
+### Calculate % coverage based on observed number of species and maximum extrapolated values (for coverage_obs_vs_extrapolated_v2.csv)
 
-sel_site = "NORTHERNMA"
-inter_data_h <- subset(rare_summ, method == "interpolated" & strata == "HIGHTIDE" & locality == sel_site)
-extra_data_h  <- subset(rare_summ, method == "extrapolated" & strata == "HIGHTIDE" & locality == sel_site)
-obs_data_h  <- subset(rare_summ, method == "observed" & strata == "HIGHTIDE" & locality == sel_site)
+sel_loc = "NORTHERNMA"
+inter_data_h <- subset(rare_summ, method == "interpolated" & strata == "HIGHTIDE" & locality == sel_loc)
+extra_data_h  <- subset(rare_summ, method == "extrapolated" & strata == "HIGHTIDE" & locality == sel_loc)
+obs_data_h  <- subset(rare_summ, method == "observed" & strata == "HIGHTIDE" & locality == sel_loc)
 spp_cover_h  <- obs_data_h$qD/max(extra_data_h$qD)
 
-inter_data_m <- subset(rare_summ, method == "interpolated" & strata == "MIDTIDE" & locality == sel_site)
-extra_data_m  <- subset(rare_summ, method == "extrapolated" & strata == "MIDTIDE" & locality == sel_site)
-obs_data_m  <- subset(rare_summ, method == "observed" & strata == "MIDTIDE" & locality == sel_site)
+inter_data_m <- subset(rare_summ, method == "interpolated" & strata == "MIDTIDE" & locality == sel_loc)
+extra_data_m  <- subset(rare_summ, method == "extrapolated" & strata == "MIDTIDE" & locality == sel_loc)
+obs_data_m  <- subset(rare_summ, method == "observed" & strata == "MIDTIDE" & locality == sel_loc)
 spp_cover_m  <- obs_data_m$qD/max(extra_data_m$qD)
 
-inter_data_l <- subset(rare_summ, method == "interpolated" & strata == "LOWTIDE" & locality == sel_site)
-extra_data_l  <- subset(rare_summ, method == "extrapolated" & strata == "LOWTIDE" & locality == sel_site)
-obs_data_l  <- subset(rare_summ, method == "observed" & strata == "LOWTIDE" & locality == sel_site)
+inter_data_l <- subset(rare_summ, method == "interpolated" & strata == "LOWTIDE" & locality == sel_loc)
+extra_data_l  <- subset(rare_summ, method == "extrapolated" & strata == "LOWTIDE" & locality == sel_loc)
+obs_data_l  <- subset(rare_summ, method == "observed" & strata == "LOWTIDE" & locality == sel_loc)
 spp_cover_l  <- obs_data_l$qD/max(extra_data_l$qD)
 
 spp_cover_h
@@ -347,13 +370,41 @@ samps.summary$totsamples[which(samps.summary$locality == "CENTRALMAINE")] <- 5
 
 #ggsave("./output/Stopping plot.pdf", stopplot, device = "pdf", width = 11, height = 6, units = "in")
 
-### This extracts maximum values of extrapolated and observed richness from each locality
+### This extracts maximum values of extrapolated and observed richness from each locality (values are aggregated in lat_vs_ssp_p2p_v3.csv)
 sel_locality = "CENTRALMAINE"
-max_extra <- filter(rare_summ, method == "extrapolated" & locality == sel_locality)
-max_obs <- filter(rare_summ, method == "observed" & locality == sel_locality)
+max_extra_h <- filter(rare_summ, method == "extrapolated" & locality == sel_locality & strata == "HIGHTIDE")
+obs_h <- filter(rare_summ, method == "observed" & locality == sel_locality & strata == "HIGHTIDE")
+max_extra_m <- filter(rare_summ, method == "extrapolated" & locality == sel_locality & strata == "MIDTIDE")
+obs_m <- filter(rare_summ, method == "observed" & locality == sel_locality & strata == "MIDTIDE")
+max_extra_l <- filter(rare_summ, method == "extrapolated" & locality == sel_locality & strata == "LOWTIDE")
+obs_l <- filter(rare_summ, method == "observed" & locality == sel_locality & strata == "LOWTIDE")
 
-max(max_extra$qD)
-max(max_obs$qD)
+max(max_extra_h$qD)
+obs_h$qD
+max(max_extra_m$qD)
+obs_m$qD
+max(max_extra_l$qD)
+obs_l$qD
+
+### Calculate min number of samples needed to cover 90% of maximum extrapolated richness (to generate Table S2)
+sel_site = "PUMPHOUSE"
+extrapol_h <- subset(samps, site == sel_site & strata == "HIGHTIDE") 
+extrapol_m <- subset(samps, site == sel_site & strata == "MIDTIDE")
+extrapol_l <- subset(samps, site == sel_site & strata == "LOWTIDE")
+
+min_sample_h <- extrapol_h$minsamples
+min_sample_m <- extrapol_m$minsamples
+min_sample_l <- extrapol_l$minsamples
+buff_h <- min_sample_h*0.2
+buff_m <- min_sample_m*0.2
+buff_l <- min_sample_l*0.2
+
+min_sample_h
+buff_h
+min_sample_m
+buff_m
+min_sample_l
+buff_l
 
 ### This calculates the difference between minimum number of samples needed for 100% coverage and actual number of samples collected
 
@@ -420,18 +471,20 @@ ggplot(ssp_lat, aes(x = latitude, y = value)) +
   xlab("Latitude") +
   ylab("Species richness")
 
-### This is the plot used in the manuscript
+### This is the plot used in the manuscript (the observed values are the maximum at low, mid and high tide, which in turn are mean values for each stratum)
 ssp_lat <-read.csv('lat_vs_spp_p2p_v3.csv')
 ssp_lat2 <- ssp_lat[-c(8, 9), ] # this removes F. de Noronha and Sta Cruz
 
 theme_set(theme_bw())
 ggplot() + 
-  geom_line(data = ssp_lat, aes(x = latitude, y = obs_max, color = 'Extrapolated'), linetype = 1, size = 1) + 
-  geom_line(data = ssp_lat, aes(x = latitude, y = qD_max, color = 'Observed average'), linetype = 1, size = 1) + 
-  geom_line(data = ssp_lat2, aes(x = latitude, y = obs_max, color = 'Extrapolated'), linetype = 2, size = 1) + 
-  geom_line(data = ssp_lat2, aes(x = latitude, y = qD_max, color = 'Observed average'), linetype = 2, size = 1) + 
+  geom_line(data = ssp_lat, aes(x = latitude, y = max_obs_all, color = 'Observed'), linetype = 1, size = 1.5) + 
+  geom_line(data = ssp_lat, aes(x = latitude, y = max_estrapol_all, color = 'Extrapolated'), linetype = 1, size = 1.5) + 
+  geom_line(data = ssp_lat2, aes(x = latitude, y = max_obs_all, color = 'Observed'), linetype = 3, size = 1.5) + 
+  geom_line(data = ssp_lat2, aes(x = latitude, y = max_estrapol_all, color = 'Extrapolated'), linetype = 3, size = 1.5) + 
   xlim(-65, 50) +
   ylim(0, 40) +
+  scale_x_continuous(breaks = seq(-70, 50, by = 10)) +
+  scale_y_continuous(breaks = seq(0, 40, by = 5)) +
   theme(axis.title.x = element_text(size=20)) +
   theme(axis.title.y = element_text(size=20)) +
   theme(text = element_text(size = 20)) +
