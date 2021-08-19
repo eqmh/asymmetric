@@ -437,3 +437,5 @@ ggplot() +
   xlab("Latitude") +
   ylab("Species richness")
 
+# end
+
