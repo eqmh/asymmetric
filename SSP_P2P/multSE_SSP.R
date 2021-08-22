@@ -375,11 +375,11 @@ multse.all$locality <- factor(multse.all$locality,
                               levels = c("ANTARTICA", "PUNTAARENAS","PUERTOMADRYN", "CONCEPCIÃ“N", "VINADELMAR", "ARRAIALDOCABO", "APACOSTADASALGAS",
 "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", "MASSACHUSETTS", "BIDDEFORD", "GIANTSTAIRS", "CHAMBERLAIN",
 "MAINE", "CENTRALMAINE"),
-                              labels = c("Antartica (Chile)", "Punta Arenas (Chile)", "Puerto Madryn (Argentina)", 
-                                         "Concepcion (Chile)", "Montemar (Chile)", "Arraial do Cabo (Brazil)",
-                                         "Costa das Algas (Brazil)", "Santa Cruz (Galapagos I.)", "Fernando de Noronha (Brazil)",
-                                         "Isla Gorgona (Colombia)", "Massachusetts (USA)", "Biddeford (USA)", "Giantstairs (USA)",
-                                         "Chamberlain (USA)", "Grindstone (USA)", "N. Maine (USA)")) 
+                              labels = c("Antartica", "Punta Arenas", "Puerto Madryn", 
+                                         "Concepción", "Montemar", "Arraial do Cabo",
+                                         "Costa das Algas", "Santa Cruz", "Fernando de Noronha",
+                                         "Isla Gorgona", "Massachusetts", "Biddeford", "Giantstairs",
+                                         "Chamberlain", "Grindstone", "N. Maine")) 
   
 
 #Plot for sampling effort

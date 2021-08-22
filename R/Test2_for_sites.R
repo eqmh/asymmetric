@@ -174,15 +174,16 @@ rare_summ <- rare %>% group_by(method, locality, strata, t) %>%
   
   mutate(locality = as.factor(as.character(locality))) %>% summarize(qD = mean(qD)) 
 
+# select the order of localities in the legend 
 rare_summ$locality <- factor(rare_summ$locality, levels = c("ANTARTICA", "PUNTAARENAS", "PUERTOMADRYN",  "CONCEPCIÃ“N", "REÃ‘ACA,VIÃ‘ADELMAR",
                                                     "ARRAIALDOCABO", "APACOSTADASALGAS", "SANTACRUZ", "FERNANDODENORONHA", "ISLAGORGONA", 
                                                     "NORTHERNMA", "BIDDEFORD","GIANTSTAIRS", "CHAMBERLAIN", "GRINDSTONE", "CENTRALMAINE"))
 
-
+# here is where you can change the locality names
 levels(rare_summ$locality) <- c("Antarctica", "Punta Arenas", "Puerto Madryn", "Concepción", 
                                 "Montemar", "Arraial do Cabo", "Costa das Algas", "Santa Cruz", "Fernando de Noronha", 
                                 "Isla Gorgona", "Massachusetts", "Biddeford", "Giant Stairs", "Chamberlain", 
-                                "Grindstone", "N. Maine") # here is where you can change the locality names
+                                "Grindstone", "N. Maine") 
 
 # Plot results with curves colored according to locality  
 (rareplot_1 <- ggplot() +
@@ -205,7 +206,6 @@ levels(rare_summ$locality) <- c("Antarctica", "Punta Arenas", "Puerto Madryn", "
 
 # Plot results with curves colored according to site  
 rare_summ_2 <- rare %>% group_by(method, site, strata, t) %>% 
-  
   mutate(site = as.factor(as.character(site))) %>% summarize(qD = mean(qD)) 
 
 levels(rare_summ_2$site) <- c() # here is where you can change the site names
@@ -230,14 +230,14 @@ levels(rare_summ_2$site) <- c() # here is where you can change the site names
 
 ### This plots individual sites
 
-sel_locality = "GRINDSTONE"
+sel_locality = c("Santa Cruz")
 
 (rareplot_2 <- ggplot() +
     geom_line(data = subset(rare_summ, method == "interpolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata))) +
     geom_line(data = subset(rare_summ, method == "extrapolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata)), lty = 3) +
     geom_point(data = subset(rare_summ, method == "observed" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata)), size = 2) +
     ylim(0, 40) +
-    xlim(0, 80) +
+    xlim(0, 25) +
     labs(x = "Number of samples", y = "Species richness") +
     facet_grid( ~ strata, scales = "free_x") +
     theme_bw(base_size = 14) +
@@ -446,17 +446,16 @@ multse_min <- aggregate(multse_data$samples, by = list(multse_data$Strata, mults
 csv_table <- 'multse_v_covstop_csv_table_v2.csv'
 arrays <-read.csv(csv_table, row.names = 1)
 
-multse_var <- arrays[, 1]
-covstop_var <- arrays[, 4]
+multse_var <- arrays[, 3]
+covstop_var <- arrays[, 6]
 
 ggplot(arrays, aes(x = multse_var, y = covstop_var)) + 
   geom_point(size = 3) +
   stat_smooth(method = "lm", col = "red") +
   geom_abline(slope=1, intercept = 0, linetype="dashed") +
-  xlim(0, 25) +
-  ylim(0, 25) +
-  scale_x_continuous(breaks = seq(0, 25, by = 2)) +
-  scale_y_continuous(breaks = seq(0, 25, by = 4)) +
+  scale_x_continuous(breaks = seq(0, 18, by = 2)) +
+  scale_y_continuous(breaks = seq(0, 20, by = 5)) +
+  coord_cartesian(ylim=c(2,20), xlim=c(2,17)) +
   theme(axis.title.x = element_text(size=20)) +
   theme(axis.title.y = element_text(size=20)) +
   theme(text = element_text(size = 20)) +
