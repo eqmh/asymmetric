@@ -449,6 +449,7 @@ arrays <-read.csv(csv_table, row.names = 1)
 multse_var <- arrays[, 3]
 covstop_var <- arrays[, 6]
 
+theme_set(theme_bw())
 ggplot(arrays, aes(x = multse_var, y = covstop_var)) + 
   geom_point(size = 3) +
   stat_smooth(method = "lm", col = "red") +
