@@ -446,8 +446,8 @@ multse_min <- aggregate(multse_data$samples, by = list(multse_data$Strata, mults
 csv_table <- 'multse_v_covstop_csv_table_v2.csv'
 arrays <-read.csv(csv_table, row.names = 1)
 
-multse_var <- arrays[, 3]
-covstop_var <- arrays[, 6]
+multse_var <- arrays[, 1]
+covstop_var <- arrays[, 4]
 
 theme_set(theme_bw())
 ggplot(arrays, aes(x = multse_var, y = covstop_var)) + 
@@ -457,9 +457,9 @@ ggplot(arrays, aes(x = multse_var, y = covstop_var)) +
   scale_x_continuous(breaks = seq(0, 18, by = 2)) +
   scale_y_continuous(breaks = seq(0, 20, by = 5)) +
   coord_cartesian(ylim=c(2,20), xlim=c(2,17)) +
-  theme(axis.title.x = element_text(size=20)) +
-  theme(axis.title.y = element_text(size=20)) +
-  theme(text = element_text(size = 20)) +
+  theme(axis.title.x = element_text(size=26)) +
+  theme(axis.title.y = element_text(size=26)) +
+  theme(text = element_text(size = 26)) +
   xlab("MultSE minimum sample") +
   ylab("Covstop minimum sample")
   
