@@ -47,9 +47,13 @@ p2p <- do.call(rbind, lapply(files, function(l) {
 # Remove duplicate rows
 p2p <- p2p %>% distinct(country, locality, site, strata, quadrat, taxa, .keep_all = TRUE) %>% ungroup()
 
-low.tide <- filter(p2p, country == "ARGENTINA", locality == "PUERTOMADRYN", strata == "LOWTIDE")
-mid.tide <- filter(p2p, country == "ARGENTINA", locality == "PUERTOMADRYN", strata == "MIDTIDE")
-high.tide <- filter(p2p, country == "ARGENTINA", locality == "PUERTOMADRYN", strata == "HIGHTIDE")
+sel_ctry = "BRAZIL"
+sel_loc = "APACOSTADASALGAS"
+sel_site = "ENSEADADASGARCAS"
+
+low.tide <- filter(p2p, country == sel_ctry, locality == sel_loc, site == sel_site, strata == "LOWTIDE")
+mid.tide <- filter(p2p, country == sel_ctry, locality == sel_loc, site == sel_site, strata == "MIDTIDE")
+high.tide <- filter(p2p, country == sel_ctry, locality == sel_loc, site == sel_site, strata == "HIGHTIDE")
 
 # extracts quadrat number from 'quadrat' strings and turns it into numeric value
 # low tide
@@ -70,7 +74,7 @@ high.tide <- bind_cols(high.tide, q_num.high)
 
 # simulate taxa richness per number of quadrats collected (with replacement)
 iterations <- 1000
-q_rep <- 50
+q_rep <- 50  # max number of quadrats
 df <- matrix(ncol = 3, nrow = q_rep)  # creates an empty data frame
 df.low <- matrix(ncol = iterations, nrow = q_rep) 
 df.mid <- matrix(ncol = iterations, nrow = q_rep) 
@@ -130,7 +134,7 @@ p <- ggplot() +
   geom_pointrange(summ.vals, mapping = aes(1:q_rep, mean.low, ymin = l.low, ymax = u.low), color = "blue") +
   geom_pointrange(summ.vals, mapping = aes(1:q_rep, mean.mid, ymin = l.mid, ymax = u.mid), color = "red") +
   geom_pointrange(summ.vals, mapping = aes(1:q_rep, mean.high, ymin = l.high, ymax = u.high), color = "green") +
-  labs(x = "Number of quadrats", y = "Species richness", title = "Gorgona Island") +
+  labs(x = "Number of quadrats", y = "Species richness", title = sel_site) +
   theme_bw() + 
   theme(legend.position= "right") 
   theme(axis.text=element_text(size=14),
@@ -164,9 +168,25 @@ q <- ggplot(data = mdf.avg, mapping = aes(x = samples, y = mean, colour = stratu
   geom_errorbar(aes(ymin = lower, ymax = upper), width=.2) +
   ylim(0, 52) +
   theme_bw() +
-  labs(x = "Number of quadrats", y = "Species richness", title = "Isla Gorgona, Colombia") +
+  labs(x = "Number of quadrats", y = "Species richness", title = sel_site) +
   theme(axis.text=element_text(size=14),
         axis.title=element_text(size=14))
 q
 
+### This plots simulated values with interpolations + extrapolations computed with Test2_for_sites.R (need to run this routine first; select_site is from Test2_for_sites.R)
+
+qq <- ggplot(data = mdf.avg, mapping = aes(x = samples, y = mean)) + 
+  geom_point(aes(col = stratum)) +
+  geom_errorbar(aes(ymin = lower, ymax = upper, col = stratum), width=.2) +
+  ylim(0, 25) +
+  geom_line(data = subset(rare_summ_2, method == "interpolated" & strata == strata & site == select_site), aes(x = t, y = qD, group = paste(strata))) +
+  geom_line(data = subset(rare_summ_2, method == "extrapolated" & strata == strata & site == select_site), aes(x = t, y = qD, group = paste(strata)), lty = 3) +
+  geom_point(data = subset(rare_summ_2, method == "observed" & strata == strata & site == select_site), aes(x = t, y = qD, group = paste(strata)), size = 2) +
+  theme_bw() +
+  labs(x = "Number of quadrats", y = "Species richness", title = "Enseada das Garças, Costa das Algas (Brazil)") +
+  theme(axis.title.x = element_text(size=20),
+        axis.title.y = element_text(size=20),
+        axis.text=element_text(size=14),
+        text = element_text(size = 16))
+qq
 
