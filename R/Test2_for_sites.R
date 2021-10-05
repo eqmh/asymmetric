@@ -228,9 +228,9 @@ levels(rare_summ_2$site) <- c() # here is where you can change the site names
 
 # ggsave("./output/Rarefaction plot 2.pdf", rareplot_1, device = "pdf", width = 10, height = 5, units = "in")  
 
-### This plots individual sites
+### This plots individual localities
 
-sel_locality = c("Santa Cruz")
+sel_locality = c("Isla Gorgona")
 
 (rareplot_2 <- ggplot() +
     geom_line(data = subset(rare_summ, method == "interpolated" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata))) +
@@ -238,6 +238,25 @@ sel_locality = c("Santa Cruz")
     geom_point(data = subset(rare_summ, method == "observed" & strata == strata & locality == sel_locality), aes(x = t, y = qD, group = paste(strata)), size = 2) +
     ylim(0, 40) +
     xlim(0, 25) +
+    labs(x = "Number of samples", y = "Species richness") +
+    facet_grid( ~ strata, scales = "free_x") +
+    theme_bw(base_size = 14) +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      # legend.position = "none"
+    )
+)
+
+### Same plot as above but for sites
+select_site = "ENSEADADASGARCAS"
+
+(rareplot_2 <- ggplot() +
+    geom_line(data = subset(rare_summ_2, method == "interpolated" & strata == strata & site == select_site), aes(x = t, y = qD, group = paste(strata))) +
+    geom_line(data = subset(rare_summ_2, method == "extrapolated" & strata == strata & site == select_site), aes(x = t, y = qD, group = paste(strata)), lty = 3) +
+    geom_point(data = subset(rare_summ_2, method == "observed" & strata == strata & site == select_site), aes(x = t, y = qD, group = paste(strata)), size = 2) +
+    ylim(0, 60) +
+    xlim(0, 50) +
     labs(x = "Number of samples", y = "Species richness") +
     facet_grid( ~ strata, scales = "free_x") +
     theme_bw(base_size = 14) +
