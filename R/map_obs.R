@@ -6,7 +6,7 @@
 # Library
 library(leaflet)
 
-setwd("G:/My Drive/MBON/GLOBAL_MBON/P2P/P2P_Project/papers/manuscripts/network_sampling_optimization")
+setwd("/Volumes/GoogleDrive/My Drive/MBON/GLOBAL_MBON/P2P/P2P_Project/papers/manuscripts/network_sampling_optimization")
 
 rm(list=ls()) ## clear variables
 
